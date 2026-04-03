@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  # 1. The Core API & Agent Runner
+  api:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - DB_HOST=db
+      - DB_USER=raajje_admin
+      - DB_PASSWORD=headlines_pass
+      - DB_NAME=headlines_db
+    depends_on:
+      - db
+      - redis
+
+  # 2. PostgreSQL for Dhivehi Content & Editorial Status
+  db:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_USER=raajje_admin
+      - POSTGRES_PASSWORD=headlines_pass
+      - POSTGRES_DB=headlines_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  # 3. Redis for 30-minute Caching & Real-time Alerts
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+
+volumes:
+  postgres_data:

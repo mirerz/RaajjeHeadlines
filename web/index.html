@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Raajjé HEADLINES | Editorial Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <style>
+        @font-face {
+            font-family: 'DivehiGlobal';
+            src: url('https://fonts.raajjeheadlines.news/divehi-global.woff2') format('woff2');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        body { 
+            font-family: 'Inter', 'DivehiGlobal', sans-serif; 
+            background-color: #0F0F1A; /* Deep Cyber Black */
+            transition: background-color 0.3s ease;
+        }
+
+        @media (prefers-color-scheme: light) {
+            body { background-color: #F8FAFC !important; color: #1E293B !important; }
+            .card-cyber { background-color: #FFFFFF !important; border: 1px solid #E2E8F0 !important; color: #1E293B !important; }
+            .text-gray-100 { color: #1E293B !important; }
+            input { background-color: #F1F5F9 !important; border: 1px solid #E2E8F0 !important; color: #1E293B !important; }
+        }
+        
+        .rtl { 
+            direction: rtl; 
+            font-family: 'DivehiGlobal', sans-serif;
+            line-height: 1.8;
+        }
+
+        .neon-border { border: 1px solid #00FFFF; box-shadow: 0 0 15px rgba(0, 255, 255, 0.1); }
+        .neon-text-pink { color: #FF1493; text-shadow: 0 0 5px rgba(255, 20, 147, 0.5); }
+    </style>
+</head>
+<body class="min-h-screen text-gray-100 p-8" x-data="dashboard()">
+  <header class="flex justify-between items-center mb-10 border-b border-[#9400D3] pb-6">
+    <div class="flex items-center gap-4">
+      <img src="file:///C:/Users/Surface/.gemini/antigravity/brain/tempmediaStorage/media__1775183124968.png" alt="Raajjé HEADLINES" class="h-12 object-contain filter drop-shadow-[0_0_10px_rgba(0,255,255,0.3)]">
+      <span class="text-xs text-cyan-400 tracking-normal">DIGITAL READY v1.0</span>
+    </div>
+    <div class="flex gap-4 items-center">
+      <div class="relative">
+        <input type="text" x-model="searchQuery" placeholder="Search news..." 
+               class="bg-[#1A1A2E] border border-[#4B0082] rounded-full px-6 py-2 text-sm focus:border-[#00FFFF] outline-none w-64 transition">
+      </div>
+      <span class="bg-[#FF4500] text-white px-4 py-1 rounded-full text-xs font-black shadow-[0_0_10px_rgba(255,69,0,0.4)]" x-text="articles.length + ' PENDING'"></span>
+      <button class="bg-[#B23AEE] hover:bg-[#9400D3] px-6 py-2 rounded-full text-sm font-bold shadow-lg transition transform hover:scale-105" @click="fetchArticles()">SYNC FEED</button>
+    </div>
+  </header>
+
+  <div class="grid grid-cols-1 gap-12">
+    <template x-for="article in articles" :key="article.ID">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8 border-b border-gray-800 pb-12">
+        <!-- Original Source -->
+        <div class="bg-gray-800 p-6 rounded-lg border-l-4 border-red-500 shadow-xl">
+          <h2 class="text-xs uppercase tracking-widest text-gray-400 mb-2">Original Source: Mihaaru</h2>
+          <h3 class="text-xl mb-4 font-semibold text-gray-200 rtl" x-text="article.RawHeadline"></h3>
+          <p class="text-gray-400 leading-relaxed rtl" x-text="article.RawBody"></p>
+        </div>
+
+        <!-- AI Rephrased -->
+        <div class="bg-gray-800 p-6 rounded-lg border-l-4 border-green-500 shadow-xl">
+          <div class="flex gap-2 mb-4">
+            <span class="text-[10px] uppercase font-bold px-2 py-1 bg-blue-900 text-blue-200 rounded" x-text="article.Section"></span>
+            <span class="text-[10px] uppercase font-bold px-2 py-1 bg-purple-900 text-purple-200 rounded" x-text="article.NewsType"></span>
+            <span class="text-[10px] uppercase font-bold px-2 py-1 bg-gray-700 text-gray-300 rounded" x-text="article.Location"></span>
+          </div>
+          <h2 class="text-xs uppercase tracking-widest text-green-400 mb-2">AI Rephrased (729 Agent)</h2>
+          <input type="text" x-model="article.RephrasedHeadlineDv" 
+                 class="w-full bg-gray-700 p-3 mb-4 rounded border border-gray-600 text-white font-semibold rtl outline-none focus:border-green-500 transition">
+          <textarea x-model="article.RephrasedBodyDv" class="w-full h-48 bg-gray-700 p-3 rounded border border-gray-600 text-white rtl outline-none focus:border-green-500 transition"></textarea>
+          
+          <h2 class="text-xs uppercase tracking-widest text-[#00FFFF] mt-6 mb-2">Member Briefing (Bullet Points)</h2>
+          <textarea x-model="article.SubscriberBriefing" class="w-full h-24 bg-[#1A1A2E] p-3 rounded border border-[#4B0082] text-white rtl outline-none focus:border-[#FF1493] transition"></textarea>
+
+          <h2 class="text-xs uppercase tracking-widest text-[#B23AEE] mt-4 mb-2">In-Depth Explainer / Report</h2>
+          <textarea x-model="article.SubscriberExplainer" class="w-full h-32 bg-[#1A1A2E] p-3 rounded border border-[#4B0082] text-white rtl outline-none focus:border-[#FF1493] transition"></textarea>
+
+          <div class="grid grid-cols-2 gap-4 mt-8 bg-[#1A1A2E]/50 p-4 rounded-xl border border-[#4B0082]">
+            <div>
+              <label class="text-[10px] uppercase font-bold text-[#00FFFF]">Visual Source</label>
+              <select x-model="article.VisualSource" class="w-full bg-[#1A1A2E] border border-gray-700 rounded px-2 py-1 text-xs outline-none">
+                <option value="internal">Local Upload / Scraped</option>
+                <option value="meta">Meta (Facebook/Instagram)</option>
+                <option value="google">Google (YouTube/Shorts)</option>
+              </select>
+            </div>
+            <div>
+              <label class="text-[10px] uppercase font-bold text-[#B23AEE]">YouTube/Social Link</label>
+              <input type="text" x-model="article.VisualURL" placeholder="https://..." 
+                     class="w-full bg-[#1A1A2E] border border-gray-700 rounded px-2 py-1 text-xs outline-none focus:border-[#FF1493]">
+            </div>
+          </div>
+
+          <div class="flex gap-4 mt-6 items-center">
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" x-model="article.IsPremium" class="form-checkbox h-4 w-4 text-yellow-500 bg-gray-700 border-gray-600 rounded">
+              <span class="text-xs font-bold text-yellow-500 uppercase">Premium Content</span>
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" x-model="article.IsAd" class="form-checkbox h-4 w-4 text-blue-500 bg-gray-700 border-gray-600 rounded">
+              <span class="text-xs font-bold text-blue-500 uppercase">Sponsored Ad</span>
+            </label>
+            <template x-if="article.IsAd">
+              <input type="text" x-model="article.AdURL" placeholder="Ad Link (URL)" class="bg-gray-700 p-1 text-[10px] rounded border border-gray-600 outline-none">
+            </template>
+          </div>
+
+          <div class="flex justify-end gap-4 mt-6">
+            <button class="text-gray-400 hover:text-white text-sm px-4 transition" @click="reject(article.ID)">Reject</button>
+            <button class="bg-green-600 hover:bg-green-500 px-8 py-2 rounded font-bold shadow-lg transition" @click="approveArticle(article.ID)">Publish to Live App</button>
+          </div>
+        </div>
+      </div>
+    </template>
+  </div>
+
+  <script>
+    function dashboard() {
+      return {
+        articles: [],
+        searchQuery: "",
+        async init() {
+          this.fetchArticles();
+        },
+        async fetchArticles() {
+          const res = await fetch('http://localhost:3000/admin/pending');
+          this.articles = await res.json();
+        },
+        async approveArticle(id) {
+        const article = this.articles.find(a => a.ID === id);
+        try {
+          const response = await fetch(`http://localhost:3000/admin/approve/${id}`, {
+            method: 'POST',
+            headers: { 
+              'Content-Type': 'application/json',
+              'Authorization': 'Basic ' + btoa('admin:headlines_secret_2026') // Update this with real auth logic
+            },
+            body: JSON.stringify({
+              headline: article.RephrasedHeadlineDv,
+              body: article.RephrasedBodyDv,
+              subscriber_briefing: article.SubscriberBriefing,
+              subscriber_explainer: article.SubscriberExplainer,
+              visual_source: article.VisualSource,
+              visual_url: article.VisualURL,
+              is_premium: article.IsPremium,
+              is_ad: article.IsAd,
+              ad_url: article.AdURL
+            })
+          });
+          if (response.ok) {
+            this.articles = this.articles.filter(a => a.ID !== id);
+            alert('Article Published & Style Lessons Saved!');
+          }
+        } catch (error) {
+          console.error("Approval failed:", error);
+        }
+      },
+        reject(id) {
+            // Logic to delete or mark as rejected
+            this.articles = this.articles.filter(a => a.ID !== id);
+        }
+      }
+    }
+  </script>
+</body>
+</html>

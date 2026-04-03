@@ -1,0 +1,28 @@
+# Raajjé HEADLINES | Production Ignore
+# Binaries
+bin/
+api_bin
+aggregator_bin
+
+# Env & Secrets
+.env
+firebase-key.json
+
+# Docker Volumes
+pgdata/
+redisdata/
+
+# OS Specific
+.DS_Store
+Thumbs.db
+
+# Dependencies
+vendor/
+node_modules/
+
+# Flutter
+.dart_tool/
+.packages
+.pub-cache/
+.pub/
+build/

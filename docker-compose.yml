@@ -1,0 +1,66 @@
+version: '3.8'
+
+services:
+  # --- 🛡️ Newsroom API Core ---
+  api:
+    build: .
+    ports:
+      - "8080:8080"
+    env_file: .env
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: always
+    networks:
+      - headlines_net
+
+  # --- 🤖 Agentic Aggregator (15m Loop) ---
+  aggregator:
+    build: .
+    entrypoint: ["./aggregator_bin"]
+    env_file: .env
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: always
+    networks:
+      - headlines_net
+
+  # --- 🗄️ Database (PostgreSQL 16) ---
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: headlines_db
+      POSTGRES_USER: ${DB_USER:-admin}
+      POSTGRES_PASSWORD: ${DB_PASS:-headlines2026}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin -d headlines_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - headlines_net
+
+  # --- 🚄 Fast Cache (Redis 7) ---
+  redis:
+    image: redis:7-alpine
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli ping | grep PONG"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - headlines_net
+
+networks:
+  headlines_net:
+    driver: bridge
+
+volumes:
+  pgdata:

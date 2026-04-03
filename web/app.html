@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="dv" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Raajjé HEADLINES | Live Feed</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #0B0E23; /* Deep Indigo Cyber */
+            color: #FFFFFF;
+        }
+
+        .glass-card {
+            background: rgba(26, 26, 46, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        .neon-border-pink { border-color: #FF1493; }
+        .neon-text-cyan { color: #00FFFF; text-shadow: 0 0 10px rgba(0, 255, 255, 0.5); }
+        .neon-glow-purple { box-shadow: 0 0 20px rgba(148, 0, 211, 0.3); }
+
+        .thaana-title { 
+            font-size: 1.5rem; 
+            font-weight: 900; 
+            line-height: 1.4;
+            letter-spacing: -0.02em;
+        }
+
+        [x-cloak] { display: none !important; }
+    </style>
+</head>
+<body x-data="liveApp()" @scroll.window="onScroll()">
+    
+    <header class="sticky top-0 z-50 glass-card border-b border-[#FF1493]/20 px-6 py-4 flex justify-between items-center text-right">
+        <div class="flex items-center gap-2">
+            <img src="./assets/logo.png" alt="Raajjé HEADLINES" class="h-10 filter drop-shadow-[0_0_8px_rgba(0,255,255,0.4)]">
+        </div>
+        <div class="flex gap-4 items-center">
+            <button @click="showLogin = true" class="text-xs uppercase tracking-widest text-[#00FFFF] font-bold neon-text-cyan hover:scale-105 transition-transform">Member Access</button>
+            <div class="w-8 h-8 rounded-full bg-[#B23AEE] flex items-center justify-center neon-glow-purple">
+                <span class="text-[10px] font-bold">HI</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- 🕌 Digital Utility Bar (Malé) -->
+    <section class="px-6 py-4 flex gap-4 overflow-x-auto no-scrollbar bg-[#1A1A2E]/50">
+        <div class="flex-none px-4 py-2 rounded-full glass-card border border-[#00FFFF]/30">
+            <span class="text-[10px] uppercase text-[#00FFFF] block">Prayer (Malé)</span>
+            <span class="text-sm font-black">Asr 15:45</span>
+        </div>
+        <div class="flex-none px-4 py-2 rounded-full glass-card border border-[#FF4500]/30">
+            <span class="text-[10px] uppercase text-[#FF4500] block">Hijri / Lunar</span>
+            <span class="text-sm font-black">14 Ramadan </span>
+        </div>
+        <div class="flex-none px-4 py-2 rounded-full glass-card border border-[#B23AEE]/30">
+            <span class="text-[10px] uppercase text-[#B23AEE] block">Pick/Drop</span>
+            <span class="text-sm font-black">18:30 (Ferry)</span>
+        </div>
+    </section>
+
+    <!-- 📡 Live Feed Content -->
+    <main class="p-6 max-w-2xl mx-auto space-y-8">
+        <template x-for="article in feed" :key="article.id">
+            <article class="glass-card rounded-2xl overflow-hidden border-[#4B0082]/30 transition-transform active:scale-[0.98]">
+                <!-- Multimedia Header -->
+                <div x-show="article.visual_url" class="h-48 bg-black relative">
+                    <img :src="article.visual_source === 'google' ? 'https://img.youtube.com/vi/placeholder/0.jpg' : 'https://placeholder.meta.com/social.png'" 
+                         class="w-full h-full object-cover opacity-60">
+                    <div class="absolute inset-0 flex items-center justify-center">
+                        <div x-show="article.visual_source === 'google'" class="w-12 h-12 rounded-full bg-red-600 flex items-center justify-center">
+                             <svg class="w-6 h-6 fill-white" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-6">
+                    <div class="flex justify-between items-start mb-4">
+                        <span x-show="article.is_breaking" class="bg-[#FF4500] text-white text-[10px] font-black px-3 py-1 rounded-full animate-pulse shadow-[0_0_10px_rgba(255,69,0,0.5)]">BREAKING</span>
+                        <span x-show="article.is_premium" class="bg-[#FFFF00] text-black text-[10px] font-black px-3 py-1 rounded-full">MEMBER ONLY</span>
+                    </div>
+
+                    <h2 class="thaana-title text-right mb-4" x-text="article.headline"></h2>
+
+                    <div x-show="article.is_premium" class="mt-4 p-4 rounded-xl bg-[#00FFFF]/5 border border-[#00FFFF]/20">
+                        <div class="flex items-center gap-2 mb-2">
+                             <span class="text-[10px] font-black text-[#00FFFF] tracking-widest">SHORT BRIEFING</span>
+                             <div class="h-[1px] flex-grow bg-[#00FFFF]/20"></div>
+                        </div>
+                        <p class="text-sm text-gray-300 leading-relaxed text-right" x-text="article.briefing"></p>
+                    </div>
+
+                    <div class="mt-6 flex justify-between items-center text-[10px] opacity-40 uppercase tracking-widest font-bold">
+                        <span x-text="article.category"></span>
+                        <span>Just Now</span>
+                    </div>
+                </div>
+            </article>
+        </template>
+    </main>
+
+    <div x-show="showLogin" x-cloak class="fixed inset-0 z-[100] flex items-center justify-center p-6">
+        <div class="absolute inset-0 bg-black/80 backdrop-blur-md" @click="showLogin = false"></div>
+        <div class="relative w-full max-w-md glass-card p-8 rounded-3xl border-[#FF1493]/30 overflow-hidden">
+            <h2 class="text-3xl font-black italic text-[#FF1493] mb-2">MEMBER ACCESS</h2>
+            <p class="text-[10px] text-gray-500 uppercase tracking-[0.2em] mb-8">Raajjé Headlines Digital Gateway</p>
+
+            <!-- Social Connect Grid -->
+            <div class="grid grid-cols-2 gap-3 mb-8">
+                <button class="bg-[#EA4335]/10 border border-[#EA4335]/30 p-3 rounded-xl flex flex-col items-center gap-1 hover:bg-[#EA4335]/20 transition-all">
+                    <span class="text-[10px] font-bold text-[#EA4335]">GMAIL</span>
+                </button>
+                <button class="bg-[#0078D4]/10 border border-[#0078D4]/30 p-3 rounded-xl flex flex-col items-center gap-1 hover:bg-[#0078D4]/20 transition-all">
+                    <span class="text-[10px] font-bold text-[#0078D4]">OUTLOOK</span>
+                </button>
+                <button class="bg-[#25D366]/10 border border-[#25D366]/30 p-3 rounded-xl flex flex-col items-center gap-1 hover:bg-[#25D366]/20 transition-all">
+                    <span class="text-[10px] font-bold text-[#25D366]">WHATSAPP</span>
+                </button>
+                <button class="bg-[#0088CC]/10 border border-[#0088CC]/30 p-3 rounded-xl flex flex-col items-center gap-1 hover:bg-[#0088CC]/20 transition-all">
+                    <span class="text-[10px] font-bold text-[#0088CC]">TELEGRAM</span>
+                </button>
+            </div>
+
+            <div class="flex items-center gap-4 mb-8">
+                <div class="h-[1px] flex-grow bg-gray-800"></div>
+                <span class="text-[8px] text-gray-600 font-bold tracking-widest uppercase">Or Tradition</span>
+                <div class="h-[1px] flex-grow bg-gray-800"></div>
+            </div>
+
+            <div class="space-y-4">
+                <input type="email" placeholder="Email Address" class="w-full bg-[#1A1A2E]/50 border border-gray-800 p-4 rounded-2xl outline-none focus:border-[#00FFFF] transition-colors">
+                <input type="password" placeholder="Key Selection" class="w-full bg-[#1A1A2E]/50 border border-gray-800 p-4 rounded-2xl outline-none focus:border-[#00FFFF] transition-colors">
+                <button class="w-full bg-[#FF1493] text-white font-black p-5 rounded-2xl shadow-[0_4px_30px_rgba(255,20,147,0.4)] hover:brightness-110 active:scale-95 transition-all">ACTIVATE ACCESS</button>
+            </div>
+            
+            <div class="mt-8 flex justify-between items-center text-[8px] opacity-40 uppercase tracking-widest font-bold">
+                <a href="#" class="hover:text-[#00FFFF]">Forgotten Key?</a>
+                <span>Member Version 1.0</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function liveApp() {
+            return {
+                showLogin: false,
+                feed: [
+                    {
+                        id: 1,
+                        headline: "ދިވެހިރާއްޖޭގެ އައު ނޫސްވެރިކަމުގެ ޒަމާން: ރާއްޖެ ހެޑްލައިންސް އިފްތިތާހުކޮށްފި",
+                        briefing: "• ރާއްޖެ ހެޑްލައިންސް އަކީ އޭއައި ބޭނުންކޮށްގެން ހަބަރުތައް އެއްކުރާ ޕްލެޓްފޯމެކެވެ.\n• މި ޕްލެޓްފޯމުގައި މެންބަރ ޝިޕް އޮޕްޝަންތައް ހިމެނެއެވެ.\n• އެންމެ ފަހުގެ ހަބަރުތައް ވަގުތުން ލިބޭނެއެވެ.",
+                        category: "Newsroom",
+                        is_breaking: true,
+                        is_premium: true,
+                        visual_url: "https://meta.com/news",
+                        visual_source: "meta"
+                    },
+                    {
+                        id: 2,
+                        headline: "މާލޭގެ ކަނޑުގެ އުޅަނދުފަހަރުގެ ވަގުތުތަކަށް ބަދަލުތަކެއް އަތުވެއްޖެ",
+                        briefing: "",
+                        category: "Local",
+                        is_breaking: false,
+                        is_premium: false,
+                        visual_url: "https://youtube.com/male",
+                        visual_source: "google"
+                    }
+                ],
+                onScroll() {
+                    // Logic for infinite scroll or header shrinking
+                }
+            }
+        }
+    </script>
+</body>
+</html>
