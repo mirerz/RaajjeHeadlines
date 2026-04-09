@@ -8,7 +8,7 @@ import (
 )
 
 type Article struct {
-	ID                  uuid.UUID `gorm:"type:uuid;primary_key;default:gen_random_uuid()"`
+	ID                  uuid.UUID `gorm:"primary_key"`
 	SourceID            int
 	OriginalURL         string `gorm:"unique;not null"`
 	RawHeadline         string `gorm:"not null"`
@@ -40,4 +40,27 @@ type Article struct {
 	UpdatedAt           time.Time
 }
 
+type Quote struct {
+	ID        uuid.UUID `gorm:"primary_key"`
+	Text      string `gorm:"not null"`
+	Context   string
+	Date      time.Time
+	IsProphecy bool `gorm:"default:true"`
+	CreatedAt time.Time
+}
+
 var DB *gorm.DB
+
+func (a *Article) BeforeCreate(tx *gorm.DB) (err error) {
+	if a.ID == uuid.Nil {
+		a.ID = uuid.New()
+	}
+	return
+}
+
+func (q *Quote) BeforeCreate(tx *gorm.DB) (err error) {
+	if q.ID == uuid.Nil {
+		q.ID = uuid.New()
+	}
+	return
+}

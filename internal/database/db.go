@@ -1,14 +1,13 @@
 package database
 
 import (
-	"fmt"
 	"log"
-	"os"
+	"time"
 
 	"github.com/google/uuid"
-	"gorm.io/driver/postgres"
-	"gorm.io/gorm"
 	"golang.org/x/crypto/bcrypt"
+	"github.com/glebarez/sqlite"
+	"gorm.io/gorm"
 )
 
 type Source struct {
@@ -19,7 +18,7 @@ type Source struct {
 }
 
 type User struct {
-	ID           uuid.UUID `gorm:"type:uuid;primaryKey;default:gen_random_uuid()"`
+	ID           uuid.UUID `gorm:"primaryKey"`
 	Email        string    `gorm:"uniqueIndex;not null"`
 	PasswordHash string    `gorm:"not null"`
 	Role         string    `gorm:"default:'subscriber'"` // 'admin', 'editor', 'subscriber'
@@ -28,24 +27,24 @@ type User struct {
 	UpdatedAt    time.Time
 }
 
+func (u *User) BeforeCreate(tx *gorm.DB) (err error) {
+	if u.ID == uuid.Nil {
+		u.ID = uuid.New()
+	}
+	return
+}
+
 func InitDB() {
-	host := os.Getenv("DB_HOST")
-	user := os.Getenv("DB_USER")
-	password := os.Getenv("DB_PASSWORD")
-	dbname := os.Getenv("DB_NAME")
-	port := "5432"
-
-	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable TimeZone=UTC",
-		host, user, password, dbname, port)
-
 	var err error
-	DB, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	DB, err = gorm.Open(sqlite.Open("headlines.db"), &gorm.Config{})
 	if err != nil {
 		log.Fatal("Failed to connect to database:", err)
 	}
 
+	// Wait, we need to enforce foreign keys for SQLite if needed, but simple auto-migration is enough.
+
 	// Auto-Migrate the models
-	DB.AutoMigrate(&Article{}, &Source{}, &User{})
+	DB.AutoMigrate(&Article{}, &Source{}, &User{}, &Quote{})
 	
 	// Seed Initial Sources if they don't exist
 	seedSources()

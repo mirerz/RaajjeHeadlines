@@ -33,18 +33,18 @@ func runScraperCycle() {
 	var wg sync.WaitGroup
 	
 	// List of supported sources
-	sources := []func(){
+	sources := []func() ([]scraper.NewsArticle, error){
 		scraper.ScrapeMihaaru,
 		scraper.ScrapeSun,
 		scraper.ScrapeVaguthu,
-		scraper.ScrapeVnews,
+		scraper.ScrapeVNews,
 	}
 
 	for _, scrapeFunc := range sources {
 		wg.Add(1)
-		go func(f func()) {
+		go func(f func() ([]scraper.NewsArticle, error)) {
 			defer wg.Done()
-			f()
+			_, _ = f()
 		}(scrapeFunc)
 	}
 

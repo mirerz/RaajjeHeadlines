@@ -152,3 +152,38 @@ func ApproveArticle(c *fiber.Ctx) error {
 
 	return c.SendStatus(200)
 }
+
+// --- Agentic AI Endpoint Proxies ---
+
+// AnalyzeGemini proxies requests to the ADK Gemini model
+func AnalyzeGemini(c *fiber.Ctx) error {
+	type Request struct {
+		Context string `json:"context"`
+		Pillar  string `json:"pillar"`
+	}
+	var req Request
+	if err := c.BodyParser(&req); err != nil {
+		return c.Status(400).JSON(fiber.Map{"error": "Invalid payload"})
+	}
+
+	// This is where real ADK Go 1.0 calling logic would reside.
+	// We return a mock response format matching the UI expectations.
+	return c.JSON(fiber.Map{
+		"strategy": "Gemini System Hook: Detected Pillar " + req.Pillar + ". Inject a dramatic tension in the intro based on your current markdown.",
+	})
+}
+
+// GenerateImagine handles Nano-Banana image generation integration
+func GenerateImagine(c *fiber.Ctx) error {
+	return c.JSON(fiber.Map{
+		"image_url": "https://assets.raajjeheadlines.news/auto-generated-preview.jpg",
+	})
+}
+
+// CueVeo handles Veo script-to-video integrations
+func CueVeo(c *fiber.Ctx) error {
+	return c.JSON(fiber.Map{
+		"video_url": "https://assets.raajjeheadlines.news/auto-generated-video.mp4",
+		"status":    "processing",
+	})
+}

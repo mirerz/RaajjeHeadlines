@@ -1,6 +1,25 @@
+package api
+
+import (
+	"log"
+	"time"
+
+	"github.com/729holdings/raajje-headlines/internal/database"
+	"github.com/gofiber/fiber/v2"
+	"github.com/golang-jwt/jwt/v4"
+	"golang.org/x/crypto/bcrypt"
+)
+
+var jwtSecret = []byte("729_headlines_production_secret_2026")
+
 type SocialLoginRequest struct {
 	Provider string `json:"provider"`
 	Token    string `json:"token"`
+}
+
+type AuthRequest struct {
+	Email    string `json:"email"`
+	Password string `json:"password"`
 }
 
 // SocialLogin handles authentication via Gmail, Outlook, WhatsApp, and Telegram
@@ -19,23 +38,6 @@ func SocialLogin(c *fiber.Ctx) error {
 		"message": "Social authentication initiated for " + req.Provider,
 		"status":  "pending_verification",
 	})
-}
-
-import (
-	"log"
-	"time"
-
-	"github.com/729holdings/raajje-headlines/internal/database"
-	"github.com/gofiber/fiber/v2"
-	"github.com/golang-jwt/jwt/v5"
-	"golang.org/x/crypto/bcrypt"
-)
-
-var jwtSecret = []byte("729_headlines_production_secret_2026")
-
-type AuthRequest struct {
-	Email    string `json:"email"`
-	Password string `json:"password"`
 }
 
 func Register(c *fiber.Ctx) error {
@@ -73,7 +75,7 @@ func Login(c *fiber.Ctx) error {
 	}
 
 	// Create JWT Token with Role
-	token := jwt.NewWithClaims(jwt.SymmetricSigningMethodHS256, jwt.MapClaims{
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"user_id": user.ID,
 		"email":   user.Email,
 		"role":    user.Role,
@@ -81,6 +83,7 @@ func Login(c *fiber.Ctx) error {
 	})
 
 	t, _ := token.SignedString(jwtSecret)
+	_ = log.Flags()
 
 	return c.JSON(fiber.Map{"token": t, "user": fiber.Map{
 		"email": user.Email,

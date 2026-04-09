@@ -48,5 +48,15 @@ func main() {
 	apiV1.Get("/article/:id", api.GetArticleDetail)
 	apiV1.Get("/search", api.SearchArticles)
 
-	log.Fatal(app.Listen(":3000"))
+	// Agentic AI Action Endpoints (Seyku Bro CAFA & Vault Integration)
+	aiV1 := app.Group("/v1")
+	aiV1.Post("/gemini/analyze", api.AnalyzeGemini)
+	aiV1.Post("/nano-banana/generate", api.GenerateImagine)
+	aiV1.Post("/veo/video", api.CueVeo)
+
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "3000"
+	}
+	log.Fatal(app.Listen(":" + port))
 }
