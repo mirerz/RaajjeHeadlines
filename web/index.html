@@ -6,10 +6,13 @@
     <title>Raajjé HEADLINES | Editorial Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <!-- Firebase JS SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
     <style>
         @font-face {
             font-family: 'DivehiGlobal';
-            src: url('https://fonts.raajjeheadlines.news/divehi-global.woff2') format('woff2');
+            src: url('https://github.com/729holdings/fonts/raw/main/divehi-global.woff2') format('woff2');
             font-weight: normal;
             font-style: normal;
         }
@@ -40,7 +43,7 @@
 <body class="min-h-screen text-gray-100 p-8" x-data="dashboard()">
   <header class="flex justify-between items-center mb-10 border-b border-[#9400D3] pb-6">
     <div class="flex items-center gap-4">
-      <img src="file:///C:/Users/Surface/.gemini/antigravity/brain/tempmediaStorage/media__1775183124968.png" alt="Raajjé HEADLINES" class="h-12 object-contain filter drop-shadow-[0_0_10px_rgba(0,255,255,0.3)]">
+      <img src="/assets/logo.png" alt="Raajjé HEADLINES" class="h-12 object-contain filter drop-shadow-[0_0_10px_rgba(0,255,255,0.3)]">
       <span class="text-xs text-cyan-400 tracking-normal">DIGITAL READY v1.0</span>
     </div>
     <div class="flex gap-4 items-center">
@@ -50,10 +53,21 @@
       </div>
       <span class="bg-[#FF4500] text-white px-4 py-1 rounded-full text-xs font-black shadow-[0_0_10px_rgba(255,69,0,0.4)]" x-text="articles.length + ' PENDING'"></span>
       <button class="bg-[#B23AEE] hover:bg-[#9400D3] px-6 py-2 rounded-full text-sm font-bold shadow-lg transition transform hover:scale-105" @click="fetchArticles()">SYNC FEED</button>
+      <button x-show="user" class="bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded-full text-xs text-white uppercase font-bold tracking-widest transition" @click="logout()">Sign Out</button>
     </div>
   </header>
 
-  <div class="grid grid-cols-1 gap-12">
+  <!-- Login Gate -->
+  <div x-show="!user" class="flex flex-col items-center justify-center mt-20">
+      <div class="bg-gray-800 p-8 rounded-2xl shadow-xl w-96 border border-[#4B0082]">
+          <h2 class="text-xl font-bold text-[#FF1493] mb-6 tracking-widest text-center">EDITOR LOGIN</h2>
+          <input type="email" x-model="email" placeholder="Admin Email" class="w-full bg-[#1A1A2E] p-3 mb-4 rounded border border-gray-700 text-white outline-none focus:border-[#00FFFF]">
+          <input type="password" x-model="password" placeholder="Password" class="w-full bg-[#1A1A2E] p-3 mb-6 rounded border border-gray-700 text-white outline-none focus:border-[#00FFFF]">
+          <button @click="login()" class="w-full bg-[#B23AEE] text-white font-black p-3 rounded shadow-lg hover:brightness-110 active:scale-95 transition">AUTHENTICATE</button>
+      </div>
+  </div>
+
+  <div x-show="user" class="grid grid-cols-1 gap-12">
     <template x-for="article in articles" :key="article.ID">
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8 border-b border-gray-800 pb-12">
         <!-- Original Source -->
@@ -65,23 +79,36 @@
 
         <!-- AI Rephrased -->
         <div class="bg-gray-800 p-6 rounded-lg border-l-4 border-green-500 shadow-xl">
-          <div class="flex gap-2 mb-4">
-            <span class="text-[10px] uppercase font-bold px-2 py-1 bg-blue-900 text-blue-200 rounded" x-text="article.Section"></span>
-            <span class="text-[10px] uppercase font-bold px-2 py-1 bg-purple-900 text-purple-200 rounded" x-text="article.NewsType"></span>
-            <span class="text-[10px] uppercase font-bold px-2 py-1 bg-gray-700 text-gray-300 rounded" x-text="article.Location"></span>
+          <div class="flex flex-wrap gap-2 mb-4">
+            <template x-if="article.IsVerifiedGov">
+              <span class="text-[10px] uppercase font-bold px-2 py-1 bg-cyan-900 text-cyan-200 rounded border border-cyan-500">🛡️ VERIFIED GOV</span>
+            </template>
+            <template x-if="article.IsBreaking">
+              <span class="text-[10px] uppercase font-bold px-2 py-1 bg-red-900 text-red-200 rounded animate-pulse">⚡ BREAKING</span>
+            </template>
+            <span class="text-[10px] uppercase font-bold px-2 py-1 bg-blue-900 text-blue-200 rounded" x-text="article.Category"></span>
+            <span class="text-[10px] uppercase font-bold px-2 py-1 bg-gray-700 text-gray-300 rounded" x-text="'TIER ' + article.SourceTier"></span>
+            <span class="text-[10px] uppercase font-bold px-2 py-1 bg-purple-900 text-purple-200 rounded" x-text="article.OriginalLanguage"></span>
           </div>
-          <h2 class="text-xs uppercase tracking-widest text-green-400 mb-2">AI Rephrased (729 Agent)</h2>
+          <h2 class="text-xs uppercase tracking-widest text-green-400 mb-2">AI Rephrased (Seyku Bro v1.1)</h2>
           <input type="text" x-model="article.RephrasedHeadlineDv" 
                  class="w-full bg-gray-700 p-3 mb-4 rounded border border-gray-600 text-white font-semibold rtl outline-none focus:border-green-500 transition">
-          <textarea x-model="article.RephrasedBodyDv" class="w-full h-48 bg-gray-700 p-3 rounded border border-gray-600 text-white rtl outline-none focus:border-green-500 transition"></textarea>
+          <textarea x-model="article.RephrasedBodyDv" class="w-full h-32 bg-gray-700 p-3 rounded border border-gray-600 text-white rtl outline-none focus:border-green-500 transition"></textarea>
           
-          <h2 class="text-xs uppercase tracking-widest text-[#00FFFF] mt-6 mb-2">Member Briefing (Bullet Points)</h2>
-          <textarea x-model="article.SubscriberBriefing" class="w-full h-24 bg-[#1A1A2E] p-3 rounded border border-[#4B0082] text-white rtl outline-none focus:border-[#FF1493] transition"></textarea>
+          <h2 class="text-xs uppercase tracking-widest text-[#00FFFF] mt-6 mb-2">INTELLIGENCE BRIEFING (Dhivehi Bullets)</h2>
+          <div class="bg-[#1A1A2E] p-4 rounded border border-[#4B0082]">
+            <template x-for="(bullet, index) in JSON.parse(article.SummaryBulletsDv || '[]')" :key="index">
+                <div class="flex items-start gap-2 mb-2 rtl">
+                    <span class="text-cyan-400 mt-1">✦</span>
+                    <p class="text-sm text-gray-300" x-text="bullet"></p>
+                </div>
+            </template>
+            <template x-if="!article.SummaryBulletsDv">
+                <p class="text-xs text-gray-500 italic">No bullets synthesized yet.</p>
+            </template>
+          </div>
 
-          <h2 class="text-xs uppercase tracking-widest text-[#B23AEE] mt-4 mb-2">In-Depth Explainer / Report</h2>
-          <textarea x-model="article.SubscriberExplainer" class="w-full h-32 bg-[#1A1A2E] p-3 rounded border border-[#4B0082] text-white rtl outline-none focus:border-[#FF1493] transition"></textarea>
-
-          <div class="grid grid-cols-2 gap-4 mt-8 bg-[#1A1A2E]/50 p-4 rounded-xl border border-[#4B0082]">
+          <div class="grid grid-cols-2 gap-4 mt-6 bg-[#1A1A2E]/50 p-4 rounded-xl border border-[#4B0082]">
             <div>
               <label class="text-[10px] uppercase font-bold text-[#00FFFF]">Visual Source</label>
               <select x-model="article.VisualSource" class="w-full bg-[#1A1A2E] border border-gray-700 rounded px-2 py-1 text-xs outline-none">
@@ -121,25 +148,86 @@
   </div>
 
   <script>
+    const DEV_MODE = true; // Toggle for sandbox development
+
     function dashboard() {
+      // Initialize Firebase (Update with your actual config details)
+      const firebaseConfig = {
+        apiKey: "YOUR_API_KEY",
+        authDomain: "adhu-492602.firebaseapp.com",
+        projectId: "adhu-492602",
+        storageBucket: "adhu-492602.appspot.com",
+        messagingSenderId: "YOUR_SENDER_ID",
+        appId: "YOUR_APP_ID"
+      };
+      
+      if (!firebase.apps.length && !DEV_MODE) {
+        firebase.initializeApp(firebaseConfig);
+      }
+
       return {
         articles: [],
         searchQuery: "",
+        user: DEV_MODE ? { email: 'sandbox-admin@adhu.space' } : null,
+        email: "",
+        password: "",
         async init() {
-          this.fetchArticles();
+          if (DEV_MODE) {
+            this.fetchArticles();
+            return;
+          }
+          firebase.auth().onAuthStateChanged(user => {
+            if (user) {
+              this.user = user;
+              this.fetchArticles();
+            } else {
+              this.user = null;
+            }
+          });
+        },
+        async login() {
+          if (DEV_MODE) {
+            this.user = { email: 'sandbox-admin@adhu.space' };
+            this.fetchArticles();
+            return;
+          }
+          try {
+            await firebase.auth().signInWithEmailAndPassword(this.email, this.password);
+          } catch(err) {
+            alert("Login Failed: " + err.message);
+          }
+        },
+        async logout() {
+          if (DEV_MODE) {
+            this.user = null;
+            return;
+          }
+          await firebase.auth().signOut();
         },
         async fetchArticles() {
-          const res = await fetch('http://localhost:3000/admin/pending');
-          this.articles = await res.json();
+          if(!this.user) return;
+          const token = DEV_MODE ? "sandbox-token" : await this.user.getIdToken();
+          const res = await fetch('http://127.0.0.1:3005/admin/pending', {
+             headers: { 'Authorization': `Bearer ${token}` }
+          });
+          if(res.ok) {
+            this.articles = await res.json();
+          }
         },
         async approveArticle(id) {
         const article = this.articles.find(a => a.ID === id);
         try {
-          const response = await fetch(`http://localhost:3000/admin/approve/${id}`, {
+          if (!this.user && !DEV_MODE) {
+            alert("No authenticated user.");
+            return;
+          }
+          const token = DEV_MODE ? "sandbox-token" : await firebase.auth().currentUser.getIdToken();
+
+          const response = await fetch(`http://127.0.0.1:3005/admin/approve/${id}`, {
             method: 'POST',
             headers: { 
               'Content-Type': 'application/json',
-              'Authorization': 'Basic ' + btoa('admin:headlines_secret_2026') // Update this with real auth logic
+              'Authorization': `Bearer ${token}` 
             },
             body: JSON.stringify({
               headline: article.RephrasedHeadlineDv,

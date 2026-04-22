@@ -1,0 +1,20 @@
+# Benethé Tarot Deck Schema
+# 729 Holdings | Midnight Heritage Protocol
+
+type Card @table {
+  id: Int! @primaryKey
+  slug: String! @unique
+  nameEn: String!
+  nameDv: String!
+  totalValue: Int
+  finalForce: Int
+  theme: String
+  prompt: String
+  imageUrl: String
+}
+
+# Queries for the Flutter App
+extend type Query {
+  cards: [Card!]! @list
+  cardBySlug(slug: String!): Card
+}

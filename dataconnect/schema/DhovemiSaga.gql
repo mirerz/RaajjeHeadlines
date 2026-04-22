@@ -1,0 +1,17 @@
+# Firebase Data Connect Schema for Endheri Odi (Dhovemi Saga)
+# Establishing the Multimodal Lore Matrix
+
+type LoreHotspot @table(name: "lore_hotspots") {
+  id: UUID! @default(expr: "uuidV4()")
+  name: String!
+  loreData: String!
+  coordinateX: Float! @default(value: 0.0)
+  coordinateY: Float! @default(value: 0.0)
+  coordinateZ: Float! @default(value: 0.0)
+  curvatureFactor: Float @default(value: 0.045)
+  terminalCutAngle: Float @default(value: 45.0)
+  stakeholderVibeMultiplier: Float @default(value: 1.0)
+  category: String # e.g., "HULL_DNA", "ORAL_HISTORY"
+  isGeminiVerified: Boolean! @default(value: false)
+  lastAwakening: Date! @default(expr: "request.time")
+}

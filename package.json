@@ -1,0 +1,7 @@
+{
+  "name": "raajje-headlines-root",
+  "private": true,
+  "scripts": {
+    "build:portal": "npm --prefix raajje-portal run build"
+  }
+}

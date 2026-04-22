@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Raajjé Headlines | adhu.space</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --endheri-black: #070915;
+            --bioluminescent-cyan: #00FFFF;
+            --neutral-white: #F8FAFC;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(0, 255, 255, 0.2);
+            --social-yellow: #FFD700;
+            --social-pink: #FFFF1493;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--neutral-white);
+            color: var(--endheri-black);
+            overflow-x: hidden;
+            transition: background-color 0.5s ease, color 0.5s ease;
+        }
+
+        /* Ambient News Styling */
+        header {
+            padding: 30px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .brand {
+            font-weight: 900;
+            font-size: 24px;
+            letter-spacing: -1px;
+            color: var(--endheri-black);
+        }
+
+        .vibe-meter {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            padding: 8px 16px;
+            background: rgba(0,0,0,0.03);
+            border-radius: 20px;
+        }
+
+        .pulse-dot {
+            width: 10px;
+            height: 10px;
+            background-color: var(--social-yellow);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--social-yellow);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(255, 215, 0, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0); }
+        }
+
+        /* Top Fold */
+        .hero {
+            padding: 100px 50px;
+            text-align: center;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 64px;
+            line-height: 1.1;
+            font-weight: 900;
+            margin-bottom: 20px;
+            letter-spacing: -2px;
+        }
+
+        .ai-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #555;
+            cursor: pointer;
+            padding: 6px 12px;
+            border-radius: 20px;
+            border: 1px solid #ddd;
+            transition: all 0.3s ease;
+        }
+
+        .ai-tag:hover {
+            border-color: var(--bioluminescent-cyan);
+            color: var(--endheri-black);
+            background: rgba(0, 255, 255, 0.1);
+        }
+
+        /* Middle Fold: Sentinel Map */
+        .sentinel-map {
+            padding: 60px 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: var(--endheri-black);
+            color: white;
+            position: relative;
+            min-height: 400px;
+            overflow: hidden;
+        }
+
+        .map-title {
+            position: absolute;
+            top: 40px;
+            left: 50px;
+            font-size: 24px;
+            font-weight: 900;
+            color: var(--bioluminescent-cyan);
+        }
+
+        /* SVG Atoll Simulation */
+        .atoll {
+            fill: rgba(255,255,255,0.1);
+            stroke: var(--bioluminescent-cyan);
+            stroke-width: 1.5;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .atoll:hover {
+            fill: rgba(0, 255, 255, 0.3);
+            filter: drop-shadow(0 0 10px var(--bioluminescent-cyan));
+        }
+
+        /* Bottom Fold: The Oivaru Brief */
+        .brief-section {
+            padding: 80px 50px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .brief-title {
+            font-size: 16px;
+            font-weight: 900;
+            color: var(--social-pink);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 30px;
+        }
+
+        .brief-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .brief-list li {
+            font-size: 20px;
+            line-height: 1.6;
+            margin-bottom: 24px;
+            padding-left: 24px;
+            position: relative;
+            border-left: 3px solid var(--bioluminescent-cyan);
+        }
+
+        /* Footer */
+        footer {
+            padding: 40px 50px;
+            background: #111;
+            color: #888;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+        }
+
+        .cultural-anchor {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--bioluminescent-cyan);
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-decoration: none;
+        }
+        
+        .cultural-anchor svg {
+            width: 20px;
+            height: 20px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="brand">adhu.space<span style="color: var(--bioluminescent-cyan)">.</span></div>
+        <div class="vibe-meter">
+            <div class="pulse-dot"></div>
+            Cabinet Vibe: Yellow (Logistics Review)
+        </div>
+    </header>
+
+    <section class="hero">
+        <h1>Global Rights Coalition Urges Immediate Halt to Death Penalty Resurgence</h1>
+        <div class="ai-tag" onclick="alert('Primary Sources:\n- Presidency MV (Official Press)\n- Maldives Independent (Op-Ed)\n- Human Rights Watch (Data)\n\nNote: Sterilized per 729-NEUTRAL-01 mandate.')">
+            <span>✨</span> Synthesized by Oivaru
+        </div>
+    </section>
+
+    <section class="sentinel-map">
+        <div class="map-title">Social Vibe Density Matrix</div>
+        <svg width="400" height="400" viewBox="0 0 100 200" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="20" r="4" class="atoll" />
+            <circle cx="55" cy="40" r="5" class="atoll" />
+            <circle cx="45" cy="60" r="7" class="atoll" style="fill: rgba(255, 215, 0, 0.4); stroke: var(--social-yellow);" /> 
+            <circle cx="60" cy="80" r="6" class="atoll" />
+            <circle cx="50" cy="100" r="8" class="atoll" style="fill: rgba(0, 255, 255, 0.5); box-shadow: 0 0 20px cyan;" /> 
+            <circle cx="40" cy="120" r="5" class="atoll" />
+            <circle cx="65" cy="140" r="4" class="atoll" />
+            <circle cx="50" cy="170" r="5" class="atoll" style="fill: rgba(255, 20, 147, 0.4); stroke: var(--social-pink);" /> 
+            <path d="M50 20 L55 40 L45 60 L60 80 L50 100 L40 120 L50 170" stroke="rgba(255,255,255,0.05)" stroke-width="1" fill="none" />
+        </svg>
+    </section>
+
+    <section class="brief-section">
+        <div class="brief-title">The Oivaru Brief (30 Sec)</div>
+        <ul class="brief-list">
+            <li>The 15-member cabinet shift is stabilizing, with public sentiment migrating from partisan anger to logistical policy analysis.</li>
+            <li>Energy import constraints tied to broader Middle East unrest remain the driving force behind the ADB's cautious 1.0% growth trajectory.</li>
+            <li>State infrastructure projects are signaling shifts geared heavily toward "Independence and Resilience," moving away from legacy expansion strategies.</li>
+        </ul>
+    </section>
+
+    <footer>
+        <div>Per Rule 729-NEUTRAL-01. Synthesized 2026.</div>
+        <a href="#" class="cultural-anchor">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                <line x1="12" y1="22.08" x2="12" y2="12"></line>
+            </svg>
+            POWERED BY 729 HOLDINGS
+        </a>
+    </footer>
+
+</body>
+</html>

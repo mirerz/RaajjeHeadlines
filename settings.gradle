@@ -1,0 +1,12 @@
+rootProject.name = "Raajje-Headlines-Ecosystem"
+
+// Include the Android Executive mobile fleet
+include ":android-executive"
+project(":android-executive").projectDir = file("android_executive")
+
+// Future modules can be added here
+include ":oivaru-news"
+project(":oivaru-news").projectDir = file("oivaru-news")
+
+include ":koshaaru-lore"
+project(":koshaaru-lore").projectDir = file("koshaaru-lore")

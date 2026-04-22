@@ -1,0 +1,157 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --maritime-indigo: #0b0e23;
+  --sentinel-surface: #1a1a2e;
+  --bioluminescent-cyan: #00ffff;
+  --glass-white: rgba(255, 255, 255, 0.05);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --font-interface: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-thaana: 'MV Boli', 'Awaadhu', 'Inter', sans-serif;
+}
+
+body {
+  background: radial-gradient(circle at center, var(--sentinel-surface) 0%, var(--maritime-indigo) 100%);
+  background-attachment: fixed;
+  color: white;
+  min-height: 100vh;
+  margin: 0;
+  font-family: var(--font-interface);
+  overflow-x: hidden;
+}
+
+.sterile-grid {
+  max-width: 42rem;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.glass-card {
+  background: var(--glass-white);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  padding: 1.5rem;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  will-change: transform;
+}
+
+.glass-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 32px rgba(0, 255, 255, 0.1);
+}
+
+.glass-card h2 {
+  color: var(--bioluminescent-cyan);
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  letter-spacing: -0.02em;
+}
+
+.pulse-hex {
+  width: 40px;
+  height: 44px;
+  background-color: var(--bioluminescent-cyan);
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  animation: pulse-hex 2s infinite ease-in-out;
+  margin: 0 auto 2rem auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@keyframes pulse-hex {
+  0% { box-shadow: 0 0 0 0 rgba(0, 255, 255, 0.7); transform: scale(1); }
+  50% { box-shadow: 0 0 20px 10px rgba(0, 255, 255, 0); transform: scale(1.05); }
+  100% { box-shadow: 0 0 0 0 rgba(0, 255, 255, 0); transform: scale(1); }
+}
+
+.footer-pulse {
+  text-align: center;
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.6);
+  padding: 2rem 0;
+  border-top: 1px solid var(--glass-border);
+  margin-top: 4rem;
+}
+
+.horizontal-nav {
+  display: flex;
+  overflow-x: auto;
+  gap: 1rem;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding: 1rem 0;
+}
+.horizontal-nav::-webkit-scrollbar {
+  display: none;
+}
+
+.thaana-pill {
+  white-space: nowrap;
+  background: var(--glass-white);
+  border: 1px solid var(--glass-border);
+  padding: 0.5rem 1.25rem;
+  border-radius: 9999px;
+  color: #fff;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.thaana-pill:hover, .thaana-pill.active {
+  background: rgba(0, 255, 255, 0.15);
+  color: var(--bioluminescent-cyan);
+  border-color: var(--bioluminescent-cyan);
+  box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
+}
+
+.pulse-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  animation: simple-pulse 2s infinite ease-in-out;
+}
+
+@keyframes simple-pulse {
+  0% { transform: scale(1); opacity: 0.8; }
+  50% { transform: scale(1.3); opacity: 0.4; box-shadow: 0 0 10px currentColor; }
+  100% { transform: scale(1); opacity: 0.8; }
+}
+
+.kinetic-thaana {
+  font-family: 'Divehi Global', var(--font-thaana);
+  font-feature-settings: "kern" 1, "liga" 1;
+  direction: rtl;
+  letter-spacing: 0.05em;
+  line-height: 1.5;
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+  -webkit-font-smoothing: antialiased;
+}
+
+.kinetic-thaana:hover {
+  transform: translateY(-2px) scale(1.01);
+  color: var(--bioluminescent-cyan);
+  text-shadow: 0 4px 12px rgba(0, 255, 255, 0.3);
+}
+
+.sterile-text {
+  font-family: var(--font-interface);
+  color: rgba(255, 255, 255, 0.75);
+  line-height: 1.6;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+}
+
+@media (min-resolution: 2dppx) {
+  .kinetic-thaana {
+    font-weight: 500;
+  }
+}

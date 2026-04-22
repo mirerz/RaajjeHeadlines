@@ -10,32 +10,34 @@ import (
 type Article struct {
 	ID                  uuid.UUID `gorm:"primary_key"`
 	SourceID            int
+	SourceName          string `gorm:"index"`
+	SourceTier          int    `gorm:"index"` // 0: Official, 1: High, 2: General, 3: Niche, 4: World
 	OriginalURL         string `gorm:"unique;not null"`
+	Citations           string `gorm:"type:text"` // JSON array of alternative sources/links
+	IsVerifiedGov       bool   `gorm:"index;default:false"`
+	IsBreaking          bool   `gorm:"index;default:false"`
+	OriginalLanguage    string `gorm:"default:dv"` // dv, en, ar, jp
 	RawHeadline         string `gorm:"not null"`
 	RawBody             string `gorm:"not null"`
-	RephrasedHeadlineDv string
+	RephrasedHeadlineDv string `gorm:"not null"` // Optimized for Divehi Global
 	RephrasedBodyDv     string
 	SummaryEn           string
-	Section             string `gorm:"index;default:newsroom"`       // 'editorial' or 'newsroom'
-	NewsType            string `gorm:"index;default:news"`           // 'article', 'opinion', 'poll', 'news'
-	Location            string `gorm:"index;default:national"`       // 'national' or 'international'
-	Tone                string `gorm:"index;default:neutral"`        // 'neutral', 'supportive', 'critical'
-	Impact              string `gorm:"index;default:low"`            // 'low', 'medium', 'high'
+	SummaryBulletsDv    string `gorm:"type:text"` // JSON array of 3 bullets in Dhivehi
+	Category            string `gorm:"index"`     // Siyasee, Kula, Khaassa, Iqthisaadhu, World
+	Section             string `gorm:"index;default:newsroom"`
+	NewsType            string `gorm:"index;default:news"`
+	Location            string `gorm:"index;default:national"`
+	Impact              string `gorm:"index;default:low"`
 	Status              string `gorm:"default:pending_review"`
-	ApprovedByUserID    uuid.UUID
-	ApprovedAt          time.Time
-	Category            string
-	IsBreaking          bool `gorm:"default:false"`
-	IsPremium           bool `gorm:"default:false"` // Paid Subscriber Content
-	SubscriberBriefing   string // Bulleted news summary for subscribers
-	SubscriberExplainer  string // Detailed context/explainer
-	VisualSource        string // 'internal', 'meta', 'google'
-	VisualURL           string // Link to social media visual (Meta/Google etc)
-	IsAd                bool `gorm:"default:false"` // Sponsored Content/Ad
-	AdURL               string // Link for sponsored Ads
-	IsCorrected         bool `gorm:"default:false"` // True if editor changed AI output
-	OriginalAIRephrasing string // Store the AI's first attempt for learning
-	ViewCount           int  `gorm:"default:0;index"` // Ordering by priority
+	IsPremium           bool   `gorm:"default:false"`
+	SubscriberBriefing  string
+	SubscriberExplainer string
+	IsAd                bool   `gorm:"default:false"`
+	AdURL               string
+	IsCorrected         bool   `gorm:"default:false"`
+	OriginalAIRephrasing string
+	ViewCount           int    `gorm:"default:0;index"`
+	VisualURL           string
 	CreatedAt           time.Time
 	UpdatedAt           time.Time
 }
@@ -61,6 +63,23 @@ func (a *Article) BeforeCreate(tx *gorm.DB) (err error) {
 func (q *Quote) BeforeCreate(tx *gorm.DB) (err error) {
 	if q.ID == uuid.Nil {
 		q.ID = uuid.New()
+	}
+	return
+}
+
+type LoreHotspot struct {
+	ID             uuid.UUID `gorm:"primary_key"`
+	Name           string    `gorm:"not null"`
+	LoreData       string    `gorm:"not null"`
+	Category       string    `gorm:"index"` // "HULL_DNA", "ORAL_HISTORY"
+	IsGeminiVerified bool    `gorm:"default:false"`
+	LastAwakening  time.Time `gorm:"default:CURRENT_TIMESTAMP"`
+	CreatedAt      time.Time
+}
+
+func (l *LoreHotspot) BeforeCreate(tx *gorm.DB) (err error) {
+	if l.ID == uuid.Nil {
+		l.ID = uuid.New()
 	}
 	return
 }

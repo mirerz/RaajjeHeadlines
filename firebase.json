@@ -1,0 +1,35 @@
+{
+  "hosting": [
+    {
+      "target": "dashboard",
+      "public": "web",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ],
+      "rewrites": [
+        {
+          "source": "/dashboard",
+          "destination": "/editorial.html"
+        }
+      ]
+    },
+    {
+      "target": "portal",
+      "source": "adhu-portal",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ]
+    }
+  ],
+  "dataconnect": {
+    "source": "dataconnect"
+  },
+  "firestore": {
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  }
+}

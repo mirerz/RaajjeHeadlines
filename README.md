@@ -13,10 +13,10 @@ Raajjé HEADLINES is a high-intelligence, multi-platform news ecosystem designed
 - **Autonomous Editor (AI)**: Rewrites headlines and body text to achieve 100% original Dhivehi content.
 - **Subscriber Briefings**: Generates high-impact "Bullet Point Summaries" and "Deep-Dive Explainers" for every article.
 
-### 🛠️ 2. Editorial Command Center
-- **Cyan Cyber-Design**: High-visibility "Thought Monitoring" dashboard for staff review.
-- **RBAC Security**: Multi-seat permissions for **Admins**, **Editors**, and **Subscribers**.
-- **Social Gateway**: Integrated one-tap registration for **Gmail**, **Outlook**, **WhatsApp**, and **Telegram**.
+### 🏛️ 2. High-Fidelity Web Portal
+- **Sovereignty Threshold**: Global tracking of verified citizen nodes towards national autonomy.
+- **Join the Republic**: State-of-the-art onboarding slider with OTP cross-verification via Maldivian mobile networks.
+- **Editorial Nexus**: Real-time Command Center for executive monitoring and strategic intelligence reports.
 
 ### 📱 3. Mobile "Super" App (Flutter)
 - **Vibrant Android Experience**: System-theme synced "Hyper-Color" 80s aesthetic.
@@ -30,10 +30,10 @@ Raajjé HEADLINES is a high-intelligence, multi-platform news ecosystem designed
 | :--- | :--- | :--- |
 | **Backend API** | Go 1.23 (Fiber / GORM) | Central News Server & Auth |
 | **Aggregator** | Go (Colly / ADK Go 1.0) | Automated News Ingestion |
-| **Frontend** | Alpine.js / Tailwind CSS | Hyper-Vibrant WebApps |
-| **Mobile App** | Flutter | Native Media Experience |
-| **Database** | PostgreSQL 16 | News Records & User Data |
-| **Cache** | Redis 7 | Live Feed & Session Sync |
+| **Web Portal** | React 19 / Vite 8 | High-Fidelity Sovereignty Vault |
+| **Mobile App** | Android Native (Kotlin) | Native Executive Interface |
+| **Database** | Firestore / DataConnect | Sovereign Intelligence Grid |
+| **AI Synthesis**| Gemini 3.1 Flash | 24/7 Latency-Zero News Pulse |
 
 ---
 
@@ -62,9 +62,12 @@ To launch the full newsroom cluster:
 
 ---
 
+## ⚖️ Legal & Licensing
+
+- **Project License**: Copyright © 2026 Raajjé HEADLINES. All Rights Reserved.
+- **Third Party**: This project utilizes OpenJDK components. See [LICENSE_OPENJDK_EXCEPTION.txt](./LICENSE_OPENJDK_EXCEPTION.txt) for the OpenJDK Assembly Exception.
+
 ### ✅ Mission Ready
 **Project Version:** 1.0.0
 **Project Lead:** 729 Holdings Agentic AI
 **Status:** PRODUCTION READY
-
-*Copyright © 2026 Raajjé HEADLINES. All Rights Reserved.*

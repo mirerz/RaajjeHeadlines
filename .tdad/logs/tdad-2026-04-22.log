@@ -1,0 +1,169 @@
+
+================================================================================
+TDAD Session Started: 2026-04-22T04:21:05.933Z
+================================================================================
+[2026-04-22T04:21:14.785Z] [EXTENSION] 🚀 TDAD extension is now ACTIVATED! Version with comprehensive logging
+[2026-04-22T04:21:14.787Z] [EXTENSION] 📁 Log file location: c:\Users\Surface\OneDrive\raajje-headlines\.tdad\logs\tdad-2026-04-22.log
+[2026-04-22T04:21:14.788Z] [EXTENSION] 📊 Workspace folders: c:\Users\Surface\OneDrive\raajje-headlines
+[2026-04-22T04:21:14.791Z] [EXTENSION] Creating WorkflowController...
+[2026-04-22T04:21:14.793Z] [EXTENSION] MVP: Using simple JSON storage (.tdad/workflows/workflow.json)
+[2026-04-22T04:21:14.797Z] [EXTENSION] TDAD Extension activated successfully
+[2026-04-22T04:21:14.799Z] [EXTENSION] Registering commands...
+[2026-04-22T04:21:22.922Z] [EXTENSION] TDAD structure already initialized
+[2026-04-22T04:21:22.924Z] [EXTENSION] Auto-opening TDAD Canvas...
+[2026-04-22T04:21:22.931Z] [CANVAS] Created directory: c:\Users\Surface\OneDrive\raajje-headlines\.tdad\workflows
+[2026-04-22T04:21:22.939Z] [CANVAS] Sprint 13: Agent Orchestrator initialized
+[2026-04-22T04:21:22.944Z] [CANVAS] [FileStatusSync] File watchers initialized
+[2026-04-22T04:21:22.951Z] [CANVAS] [FileStatusSync] Synced 0 nodes
+[2026-04-22T04:21:22.969Z] [EXTENSION] FeedbackManager: Session 1
+[2026-04-22T04:22:39.868Z] [CANVAS] WEBVIEW
+Data: Using stylesheets: index-WTAp2nbL.css
+[2026-04-22T04:22:39.878Z] [CANVAS] MVP: Canvas initialized with simple JSON storage
+[2026-04-22T04:22:42.310Z] [CANVAS] [FitView] isLoading=true, nodes.length=0, folderId=null
+[2026-04-22T04:22:42.437Z] [CANVAS] [FileStatusSync] Synced 0 nodes
+[2026-04-22T04:22:42.964Z] [CANVAS] [FitView] isLoading=false, nodes.length=0, folderId=null
+[2026-04-22T04:39:21.395Z] [CANVAS] Received generateBlueprintPrompt message: mode=refactor
+[2026-04-22T04:39:21.418Z] [CANVAS] === handleGenerateBlueprintPrompt START ===
+[2026-04-22T04:39:21.420Z] [CANVAS] Mode: refactor, Context: src/...
+[2026-04-22T04:39:21.527Z] [CANVAS] Using WORKSPACE template: c:\Users\Surface\OneDrive\raajje-headlines\.tdad\prompts\generate-blueprint.md
+[2026-04-22T04:39:21.538Z] [CANVAS] Template content (first 500 chars): # SYSTEM RULES: TDAD PROTOCOL
+You are building a **TDAD Dependency Graph**, NOT a standard React app.
+
+## Rules
+1. **Node = Testable Behavior:** Each node is a small, testable piece of functionality that can be verified with BDD scenarios and Playwright tests.
+   - ✅ GOOD: "validate-email", "hash-password", "create-user-record", "display-error-message"
+   - ❌ BAD: "authentication", "user-management", "handle-forms" (too generic)
+   - ❌ BAD: "install-sdk", "setup-database", "configure-env"
+[2026-04-22T04:39:21.619Z] [CANVAS] ✅ Blueprint prompt generated and copied successfully
+[2026-04-22T04:39:21.649Z] [CANVAS] === handleGenerateBlueprintPrompt END ===
+[2026-04-22T04:47:11.236Z] [CANVAS] Navigated to breadcrumb: root
+[2026-04-22T04:47:11.241Z] [CANVAS] [FileStatusSync] Synced 0 nodes
+[2026-04-22T04:47:26.311Z] [CANVAS] Received getAutopilotInfo message
+[2026-04-22T04:47:55.606Z] [CANVAS] Project context updated
+[2026-04-22T04:48:13.163Z] [CANVAS] CLI/Autopilot settings updated
+[2026-04-22T04:48:19.890Z] [CANVAS] Copying to clipboard
+[2026-04-22T04:48:31.264Z] [CANVAS] Opening URL: https://api.slack.com/apps/new
+[2026-04-22T04:52:19.612Z] [CANVAS] [FileStatusSync] Synced 0 nodes
+[2026-04-22T04:52:29.523Z] [CANVAS] [AutoLayout] START - 0 nodes to arrange
+[2026-04-22T04:52:29.529Z] [CANVAS] [AutoLayout] Calculated 0 positions
+[2026-04-22T04:52:29.532Z] [CANVAS] [AutoLayout] ReactFlow nodes updated, updating allNodes state
+[2026-04-22T04:52:29.538Z] [CANVAS] [AutoLayout] Sending updates to backend
+[2026-04-22T04:52:29.575Z] [CANVAS] [AutoLayout] Waiting 1000ms before resetting flag
+[2026-04-22T04:52:30.100Z] [CANVAS] saveNow: Saving 0 nodes to folder root - statuses: []
+[2026-04-22T04:52:30.466Z] [EXTENSION] Blueprint workflow created: c:\Users\Surface\OneDrive\raajje-headlines\.tdad\workflows\root.workflow.json
+[2026-04-22T04:52:30.566Z] [EXTENSION] Scaffolded 1 files from blueprint
+[2026-04-22T04:52:30.576Z] [CANVAS] [AutoLayout] COMPLETE - Flag reset, isAutoLayoutingRef = false
+[2026-04-22T04:52:47.606Z] [CANVAS] [AutoLayout] START - 0 nodes to arrange
+[2026-04-22T04:52:47.610Z] [CANVAS] [AutoLayout] Calculated 0 positions
+[2026-04-22T04:52:47.613Z] [CANVAS] [AutoLayout] ReactFlow nodes updated, updating allNodes state
+[2026-04-22T04:52:47.619Z] [CANVAS] [AutoLayout] Sending updates to backend
+[2026-04-22T04:52:47.623Z] [CANVAS] [AutoLayout] Waiting 1000ms before resetting flag
+[2026-04-22T04:52:48.136Z] [CANVAS] saveNow: Saving 0 nodes to folder root - statuses: []
+[2026-04-22T04:52:48.407Z] [EXTENSION] Blueprint workflow changed (suppressed - internal save): c:\Users\Surface\OneDrive\raajje-headlines\.tdad\workflows\root.workflow.json
+[2026-04-22T04:52:48.641Z] [CANVAS] [AutoLayout] COMPLETE - Flag reset, isAutoLayoutingRef = false
+[2026-04-22T04:52:50.769Z] [CANVAS] saveNow: Saving 0 nodes to folder root - statuses: []
+[2026-04-22T04:52:50.823Z] [CANVAS] [FileStatusSync] File watchers disposed
+[2026-04-22T04:52:51.045Z] [EXTENSION] Blueprint workflow changed (suppressed - internal save): c:\Users\Surface\OneDrive\raajje-headlines\.tdad\workflows\root.workflow.json
+[2026-04-22T04:56:48.572Z] [EXTENSION] Blueprint workflow changed: c:\Users\Surface\OneDrive\raajje-headlines\.tdad\workflows\root.workflow.json
+[2026-04-22T04:56:48.590Z] [EXTENSION] Scaffolded 1 new files from blueprint update
+
+================================================================================
+TDAD Session Started: 2026-04-22T06:20:28.960Z
+================================================================================
+[2026-04-22T06:21:33.726Z] [EXTENSION] 🚀 TDAD extension is now ACTIVATED! Version with comprehensive logging
+[2026-04-22T06:21:33.728Z] [EXTENSION] 📁 Log file location: c:\Users\Surface\OneDrive\raajje-headlines\.tdad\logs\tdad-2026-04-22.log
+[2026-04-22T06:21:33.731Z] [EXTENSION] 📊 Workspace folders: c:\Users\Surface\OneDrive\raajje-headlines
+[2026-04-22T06:21:33.749Z] [EXTENSION] Creating WorkflowController...
+[2026-04-22T06:21:33.754Z] [EXTENSION] MVP: Using simple JSON storage (.tdad/workflows/workflow.json)
+[2026-04-22T06:21:33.756Z] [EXTENSION] TDAD Extension activated successfully
+[2026-04-22T06:21:33.758Z] [EXTENSION] Registering commands...
+[2026-04-22T06:21:59.115Z] [EXTENSION] FeedbackManager: Session 2
+[2026-04-22T06:22:01.937Z] [EXTENSION] TDAD structure already initialized
+[2026-04-22T06:22:01.939Z] [EXTENSION] Auto-opening TDAD Canvas...
+[2026-04-22T06:22:01.955Z] [CANVAS] Sprint 13: Agent Orchestrator initialized
+[2026-04-22T06:22:01.965Z] [CANVAS] [FileStatusSync] File watchers initialized
+[2026-04-22T06:22:02.049Z] [CANVAS] [FileStatusSync] Synced 0 nodes
+[2026-04-22T06:28:37.896Z] [CANVAS] WEBVIEW
+Data: Using stylesheets: index-WTAp2nbL.css
+[2026-04-22T06:28:37.932Z] [CANVAS] MVP: Canvas initialized with simple JSON storage
+
+================================================================================
+TDAD Session Started: 2026-04-22T07:03:49.851Z
+================================================================================
+[2026-04-22T07:04:46.449Z] [EXTENSION] 🚀 TDAD extension is now ACTIVATED! Version with comprehensive logging
+[2026-04-22T07:04:46.453Z] [EXTENSION] 📁 Log file location: c:\Users\Surface\OneDrive\raajje-headlines\.tdad\logs\tdad-2026-04-22.log
+[2026-04-22T07:04:46.455Z] [EXTENSION] 📊 Workspace folders: c:\Users\Surface\OneDrive\raajje-headlines
+[2026-04-22T07:04:46.460Z] [EXTENSION] Creating WorkflowController...
+[2026-04-22T07:04:46.463Z] [EXTENSION] MVP: Using simple JSON storage (.tdad/workflows/workflow.json)
+[2026-04-22T07:04:46.467Z] [EXTENSION] TDAD Extension activated successfully
+[2026-04-22T07:04:46.469Z] [EXTENSION] Registering commands...
+[2026-04-22T07:05:03.633Z] [EXTENSION] FeedbackManager: Session 3
+[2026-04-22T07:05:21.857Z] [EXTENSION] TDAD structure already initialized
+[2026-04-22T07:05:22.141Z] [EXTENSION] Auto-opening TDAD Canvas...
+[2026-04-22T07:05:22.275Z] [CANVAS] Sprint 13: Agent Orchestrator initialized
+[2026-04-22T07:05:22.289Z] [CANVAS] [FileStatusSync] File watchers initialized
+[2026-04-22T07:05:22.341Z] [CANVAS] [FileStatusSync] Synced 0 nodes
+[2026-04-22T07:11:48.474Z] [CANVAS] WEBVIEW
+Data: Using stylesheets: index-WTAp2nbL.css
+[2026-04-22T07:11:48.485Z] [CANVAS] MVP: Canvas initialized with simple JSON storage
+
+================================================================================
+TDAD Session Started: 2026-04-22T07:22:10.098Z
+================================================================================
+[2026-04-22T07:23:16.930Z] [EXTENSION] 🚀 TDAD extension is now ACTIVATED! Version with comprehensive logging
+[2026-04-22T07:23:16.934Z] [EXTENSION] 📁 Log file location: c:\Users\Surface\OneDrive\raajje-headlines\.tdad\logs\tdad-2026-04-22.log
+[2026-04-22T07:23:16.936Z] [EXTENSION] 📊 Workspace folders: c:\Users\Surface\OneDrive\raajje-headlines
+[2026-04-22T07:23:16.940Z] [EXTENSION] Creating WorkflowController...
+[2026-04-22T07:23:16.942Z] [EXTENSION] MVP: Using simple JSON storage (.tdad/workflows/workflow.json)
+[2026-04-22T07:23:16.947Z] [EXTENSION] TDAD Extension activated successfully
+[2026-04-22T07:23:16.950Z] [EXTENSION] Registering commands...
+[2026-04-22T07:23:36.101Z] [EXTENSION] FeedbackManager: Session 4
+[2026-04-22T07:23:42.332Z] [EXTENSION] TDAD structure already initialized
+[2026-04-22T07:23:42.336Z] [EXTENSION] Auto-opening TDAD Canvas...
+[2026-04-22T07:23:42.373Z] [CANVAS] Sprint 13: Agent Orchestrator initialized
+[2026-04-22T07:23:42.378Z] [CANVAS] [FileStatusSync] File watchers initialized
+[2026-04-22T07:23:42.387Z] [CANVAS] [FileStatusSync] Synced 0 nodes
+[2026-04-22T07:26:31.038Z] [EXTENSION] Deserializing webview panel state
+[2026-04-22T07:26:31.047Z] [CANVAS] Sprint 13: Agent Orchestrator initialized
+[2026-04-22T07:26:31.055Z] [CANVAS] [FileStatusSync] File watchers initialized
+[2026-04-22T07:26:31.066Z] [CANVAS] [FileStatusSync] Synced 0 nodes
+[2026-04-22T07:27:03.450Z] [CANVAS] WEBVIEW
+Data: Using stylesheets: index-WTAp2nbL.css
+[2026-04-22T07:27:03.455Z] [CANVAS] ERROR: Failed to initialize canvas
+Error: Webview is disposed
+Stack: Error: Webview is disposed
+	at m0e.c (file:///c:/Users/Surface/AppData/Local/Programs/Antigravity/resources/app/out/vs/workbench/api/node/extensionHostProcess.js:215:93260)
+	at get webview (file:///c:/Users/Surface/AppData/Local/Programs/Antigravity/resources/app/out/vs/workbench/api/node/extensionHostProcess.js:215:92427)
+	at c:\Users\Surface\.antigravity\extensions\tdad.tdad-0.0.27-universal\out\vscode-integration\providers\SimplifiedWorkflowCanvasProvider.js:621:37
+	at Array.map (<anonymous>)
+	at SimplifiedWorkflowCanvasProvider._getHtmlForWebview (c:\Users\Surface\.antigravity\extensions\tdad.tdad-0.0.27-universal\out\vscode-integration\providers\SimplifiedWorkflowCanvasProvider.js:620:38)
+	at async SimplifiedWorkflowCanvasProvider._initialize (c:\Users\Surface\.antigravity\extensions\tdad.tdad-0.0.27-universal\out\vscode-integration\providers\SimplifiedWorkflowCanvasProvider.js:133:40)
+[2026-04-22T07:31:05.114Z] [CANVAS] WEBVIEW
+Data: Using stylesheets: index-WTAp2nbL.css
+[2026-04-22T07:31:05.121Z] [CANVAS] ERROR: Failed to initialize canvas
+Error: Webview is disposed
+Stack: Error: Webview is disposed
+	at m0e.c (file:///c:/Users/Surface/AppData/Local/Programs/Antigravity/resources/app/out/vs/workbench/api/node/extensionHostProcess.js:215:93260)
+	at get webview (file:///c:/Users/Surface/AppData/Local/Programs/Antigravity/resources/app/out/vs/workbench/api/node/extensionHostProcess.js:215:92427)
+	at c:\Users\Surface\.antigravity\extensions\tdad.tdad-0.0.27-universal\out\vscode-integration\providers\SimplifiedWorkflowCanvasProvider.js:621:37
+	at Array.map (<anonymous>)
+	at SimplifiedWorkflowCanvasProvider._getHtmlForWebview (c:\Users\Surface\.antigravity\extensions\tdad.tdad-0.0.27-universal\out\vscode-integration\providers\SimplifiedWorkflowCanvasProvider.js:620:38)
+	at async SimplifiedWorkflowCanvasProvider._initialize (c:\Users\Surface\.antigravity\extensions\tdad.tdad-0.0.27-universal\out\vscode-integration\providers\SimplifiedWorkflowCanvasProvider.js:133:40)
+
+================================================================================
+TDAD Session Started: 2026-04-22T07:41:57.439Z
+================================================================================
+[2026-04-22T07:48:15.839Z] [EXTENSION] 🚀 TDAD extension is now ACTIVATED! Version with comprehensive logging
+[2026-04-22T07:48:15.841Z] [EXTENSION] 📁 Log file location: c:\Users\Surface\OneDrive\raajje-headlines\.tdad\logs\tdad-2026-04-22.log
+[2026-04-22T07:48:15.844Z] [EXTENSION] 📊 Workspace folders: c:\Users\Surface\OneDrive\raajje-headlines
+[2026-04-22T07:48:15.855Z] [EXTENSION] Creating WorkflowController...
+[2026-04-22T07:48:15.859Z] [EXTENSION] MVP: Using simple JSON storage (.tdad/workflows/workflow.json)
+[2026-04-22T07:48:15.945Z] [EXTENSION] TDAD Extension activated successfully
+[2026-04-22T07:48:15.956Z] [EXTENSION] Registering commands...
+[2026-04-22T07:56:38.570Z] [EXTENSION] FeedbackManager: Session 5
+[2026-04-22T07:57:22.783Z] [EXTENSION] FeedbackManager: Showing feedback form in webview...
+[2026-04-22T07:59:07.765Z] [EXTENSION] TDAD structure already initialized
+[2026-04-22T07:59:07.769Z] [EXTENSION] Auto-opening TDAD Canvas...
+[2026-04-22T07:59:07.891Z] [CANVAS] Sprint 13: Agent Orchestrator initialized
+[2026-04-22T07:59:07.906Z] [CANVAS] [FileStatusSync] File watchers initialized
+[2026-04-22T07:59:08.040Z] [CANVAS] [FileStatusSync] Synced 0 nodes

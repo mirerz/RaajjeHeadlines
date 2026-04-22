@@ -1,0 +1,2 @@
+rootProject.name = "729-Executive-App"
+include ':app'

@@ -25,8 +25,7 @@ func GetFeed(c *fiber.Ctx) error {
 
 	// 2. Cache Miss: Query Database
 	var articles []database.Article
-	result := database.DB.Select("id", "rephrased_headline_dv", "category", "is_breaking", "section", "news_type", "location", "created_at", "view_count").
-		Where("status = ?", "published").
+	result := database.DB.Where("status = ?", "published").
 		Order("view_count desc, created_at desc").
 		Limit(20).
 		Find(&articles)
@@ -186,4 +185,14 @@ func CueVeo(c *fiber.Ctx) error {
 		"video_url": "https://assets.raajjeheadlines.news/auto-generated-video.mp4",
 		"status":    "processing",
 	})
+}
+
+// GetLore returns lore hotspots for the Koshaaru browser
+func GetLore(c *fiber.Ctx) error {
+	var hotspots []database.LoreHotspot
+	result := database.DB.Order("last_awakening desc").Find(&hotspots)
+	if result.Error != nil {
+		return c.Status(500).JSON(fiber.Map{"error": "Could not fetch lore"})
+	}
+	return c.JSON(hotspots)
 }

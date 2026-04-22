@@ -1,0 +1,10 @@
+node_modules/
+.git/
+.firebase/
+android_executive/build/
+android_executive/app/build/
+dist/
+.next/
+.gemini/
+headlines.db
+*.log

@@ -69,63 +69,57 @@ func rephraseArticle(ctx context.Context, model *genai.GenerativeModel, article 
 	}
 
 	prompt := fmt.Sprintf(`
-		You are Seyku Bro, the AI editor for the Frontline Voice and Raajjé HEADLINES. 
-		Your mission is to rephrase Maldivian news into a sovereign, whistleblower, and authoritative voice.
-		Focus on fiscal transparency, specifically regarding the Sovereign Development Fund (SDF) and national debt.
+	You are Seyku Bro, the Lead AI Editor for Raajjé HEADLINES (729 Holdings).
+	Your mission is to rephrase Maldivian and Global news into a sovereign, authoritative, and "Visual First" voice.
 
-		TONE REQUIREMENTS:
-		- Direct, intellectual, and slightly prophetic (informed by Mohamed Nasheed's rhetoric).
-		- High-density data points should be highlighted (e.g., $524M SDF drawdown).
-		- Language: Dhivehi (for the body/headline) and English (for summary).
+	TASKS:
+	1. Translation & Rephrasing: If OriginalLanguage is "en", translate to Dhivehi. Ensure compatibility with Divehi Global typeface.
+	2. Summarization: Generate 3 high-impact bullet points in Dhivehi.
+	3. Categorization: Tag as Siyasee (Politics), Kula (Entertainment), Khaassa (Featured), Iqthisaadhu (Economy), or World (International).
+	4. Intelligence Tagging: Identify if this is a "Verified Government Update".
 
-		CONTEXT FROM PREVIOUS EDITORIAL APPROVALS:
-		%s
+	ORIGINAL CONTEXT:
+	Source: %s (Tier: %d)
+	IsGov: %v
+	Lang: %s
+	Headline: %s
+	Body: %s
 
-		ARTICLE TO REPROCESS:
-		Headline: %s
-		Body: %s
-
-		OUTPUT JSON FORMAT:
-		{
-			"rephrased_headline_dv": "Title in Dhivehi",
-			"rephrased_body_dv": "Body in Dhivehi",
-			"summary_en": "One sentence English executive summary",
-			"subscriber_briefing": "3-5 bullet points of insider context",
-			"is_breaking": true/false,
-			"location": "Location name",
-			"impact": "High/Medium/Low"
-		}
-	`, editorContext, article.RawHeadline, article.RawBody)
+	OUTPUT JSON FORMAT:
+	{
+		"headline_dhivehi": "Title in Dhivehi",
+		"body_dhivehi": "Full rephrased body",
+		"summary_bullets": ["bullet 1", "bullet 2", "bullet 3"],
+		"category": "Siyasee|Kula|Khaassa|Iqthisaadhu|World",
+		"impact": "High|Medium|Low"
+	}
+	`, article.SourceName, article.SourceTier, article.IsVerifiedGov, article.OriginalLanguage, article.RawHeadline, article.RawBody)
 
 	resp, err := model.GenerateContent(ctx, genai.Text(prompt))
 	if err != nil {
-		log.Printf("Gemini Error: %v", err)
-		return
+	log.Printf("Gemini Error: %v", err)
+	return
 	}
 
 	if len(resp.Candidates) == 0 {
-		return
+	return
 	}
 
-	// Parse JSON from response
 	var output map[string]interface{}
-	// Note: In production, we'd need a more robust JSON extractor for LLM output blocks
-	// For this vector, we assume the model returns valid JSON text
 	err = json.Unmarshal([]byte(fmt.Sprint(resp.Candidates[0].Content.Parts[0])), &output)
 	if err != nil {
-		log.Printf("Error decoding AI output: %v", err)
-		// Fallback mapping if JSON is malformed
-		article.RephrasedHeadlineDv = "🤖 (Parsed Error) " + article.RawHeadline
-		article.RephrasedBodyDv = "🤖 (Parsed Error) " + article.RawBody
+	log.Printf("Error decoding AI output: %v", err)
+	article.RephrasedHeadlineDv = "🤖 (Error) " + article.RawHeadline
 	} else {
-		// Map success
-		if h, ok := output["rephrased_headline_dv"].(string); ok { article.RephrasedHeadlineDv = h }
-		if b, ok := output["rephrased_body_dv"].(string); ok { article.RephrasedBodyDv = b }
-		if s, ok := output["summary_en"].(string); ok { article.SummaryEn = s }
-		if sb, ok := output["subscriber_briefing"].(string); ok { article.SubscriberBriefing = sb }
-		if ib, ok := output["is_breaking"].(bool); ok { article.IsBreaking = ib }
-		if loc, ok := output["location"].(string); ok { article.Location = loc }
-		if imp, ok := output["impact"].(string); ok { article.Impact = imp }
+	if h, ok := output["headline_dhivehi"].(string); ok { article.RephrasedHeadlineDv = h }
+	if b, ok := output["body_dhivehi"].(string); ok { article.RephrasedBodyDv = b }
+	if cat, ok := output["category"].(string); ok { article.Category = cat }
+	if s, ok := output["summary_en"].(string); ok { article.SummaryEn = s }
+	if bullets, ok := output["summary_bullets"].([]interface{}); ok {
+		bJson, _ := json.Marshal(bullets)
+		article.SummaryBulletsDv = string(bJson)
+	}
+	if imp, ok := output["impact"].(string); ok { article.Impact = imp }
 	}
 
 	database.DB.Save(article)
@@ -133,6 +127,56 @@ func rephraseArticle(ctx context.Context, model *genai.GenerativeModel, article 
 }
 
 func runStubAgent(ctx context.Context) {
-	// ... (Rest of the previous local stub logic for fallback)
+	ticker := time.NewTicker(30 * time.Second)
+	defer ticker.Stop()
+
+	for {
+		log.Println("Checking for pending news to rephrase (STUB MODE)...")
+		var articles []database.Article
+		database.DB.Where("status = ?", "pending_review").Find(&articles)
+
+		for _, article := range articles {
+			log.Printf("Synthesizing (STUB): %s", article.RawHeadline)
+			
+			// Simple mock transformations for local dev
+			article.RephrasedHeadlineDv = "🤖 STUB: " + article.RawHeadline
+			if article.OriginalLanguage == "en" {
+				article.RephrasedHeadlineDv = "🤖 [Translated] " + article.RawHeadline
+			}
+			
+			article.RephrasedBodyDv = "Local rephrased content for: " + article.RawHeadline
+			
+			// Logic-based categorization for stub
+			if article.SourceTier == 4 {
+				article.Category = "World"
+			} else if article.IsVerifiedGov {
+				article.Category = "Siyasee"
+				article.Impact = "High"
+			} else {
+				article.Category = "Khaassa"
+			}
+			
+			bullets := []string{
+				"ސޭންޑްބޮކްސް މޯޑުގައި އޮޓޯއިން އުފައްދާފައިވާ ޚަބަރު",
+				"729 ހޯލްޑިންގްސްގެ އޭޖެންޓިކް ނިއުސްރޫމްގެ ޓެސްޓު",
+				"ޑައިވްހި ގްލޯބަލް ފޮންޓަށް ސަޕޯޓްކުރާގޮތަށް ތައްޔާރުކޮށްފައިވާ ބްރީފިންގް",
+			}
+			bJson, _ := json.Marshal(bullets)
+			article.SummaryBulletsDv = string(bJson)
+			
+			if article.Impact == "" {
+				article.Impact = "Low"
+			}
+			
+			database.DB.Save(&article)
+			log.Printf("Successfully synthesized (STUB): %s", article.RawHeadline)
+		}
+
+		select {
+		case <-ctx.Done():
+			return
+		case <-ticker.C:
+		}
+	}
 }
 

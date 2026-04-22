@@ -1,0 +1,13 @@
+{
+  "enabledPhases": [
+    "plan",
+    "design",
+    "test-plan",
+    "implement",
+    "review",
+    "uat",
+    "release",
+    "monitor",
+    "doc-sync"
+  ]
+}

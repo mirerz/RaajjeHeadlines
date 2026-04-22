@@ -1,0 +1,23 @@
+# Oivaru News & Governance Schema
+# 729-NEUTRAL-01 Sterile Compliance
+
+type CabinetMember @table {
+  id: Int! @default(expr: "auto")
+  thaName: String!
+  engName: String!
+  portfolio: String!
+  vibeDensity: Float! @default(value: 0.5)
+}
+
+type NewsArticle @table {
+  id: UUID! @default(expr: "uuidv4()")
+  headlineTha: String!
+  headlineEng: String!
+  bodyTha: String!
+  bodyEng: String!
+  category: String! @index
+  conflictLevel: String! # "High Conflict", "Cautionary", "Stable"
+  neutralityScore: Float! @default(value: 1.0)
+  timestamp: Date! @default(expr: "request.time")
+}
+

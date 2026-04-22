@@ -26,3 +26,8 @@ node_modules/
 .pub-cache/
 .pub/
 build/
+.copilot-specs-cache/
+# Agent Checkpoint Manager
+.vscode/.agent-checkpoints/
+
+/net-commander

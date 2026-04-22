@@ -1,0 +1,24 @@
+name: 729 Guardrail
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  guardrail:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Keyword Scan
+        run: |
+          FORBIDDEN=("private-venture-01" "secret-holdings" "internal-leak-test")
+          for word in "${FORBIDDEN[@]}"; do
+            if grep -r "$word" .; then
+              echo "❌ SECURITY BREACH: Forbidden keyword '$word' found in codebase."
+              exit 1
+            fi
+          done
+          echo "✅ Guardrail passed. No private venture leaks detected."

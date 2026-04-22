@@ -1,6 +1,7 @@
 package scraper
 
 import (
+	"log"
 	"strings"
 
 	"github.com/729holdings/raajje-headlines/internal/utils"
@@ -24,6 +25,7 @@ func ScrapeMihaaru() ([]NewsArticle, error) {
 	// 1. Find all article links on the homepage/category page
 	c.OnHTML("a.story-link", func(e *colly.HTMLElement) {
 		link := e.Request.AbsoluteURL(e.Attr("href"))
+		log.Printf("[Mihaaru] Found link: %s", link)
 		
 		// Create a new collector to visit each article's full page
 		articleCollector := c.Clone()
@@ -35,11 +37,16 @@ func ScrapeMihaaru() ([]NewsArticle, error) {
 				Timestamp: ae.ChildAttr("time", "datetime"),
 				Body:      utils.NormalizeThaana(strings.TrimSpace(ae.ChildText(".story-content"))),
 			}
+			log.Printf("[Mihaaru] Scraped article: %s", article.Title)
 			articles = append(articles, article)
 		})
 		articleCollector.Visit(link)
 	})
 
-	err := c.Visit("https://mihaaru.com/local")
+	log.Println("[Mihaaru] Visiting: https://mihaaru.com")
+	err := c.Visit("https://mihaaru.com")
+	if err != nil {
+		log.Printf("[Mihaaru] Visit error: %v", err)
+	}
 	return articles, err
 }

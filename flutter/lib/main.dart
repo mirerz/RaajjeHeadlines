@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'koshaaru_vault.dart';
 
 void main() {
   runApp(const RaajjeHeadlinesApp());
@@ -12,8 +13,8 @@ class RaajjeHeadlinesApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Raajjé HEADLINES',
-      themeMode: ThemeMode.system, // Device Theme Collaboration
+      title: '729 Holdings | Sentinel Surface',
+      themeMode: ThemeMode.system,
       theme: ThemeData(
         brightness: Brightness.light,
         scaffoldBackgroundColor: const Color(0xFFF8FAFC),
@@ -26,11 +27,45 @@ class RaajjeHeadlinesApp extends StatelessWidget {
       ),
       darkTheme: ThemeData(
         brightness: Brightness.dark,
-        primaryColor: const Color(0xFFFF1493),
-        scaffoldBackgroundColor: const Color(0xFF0B0E23),
-        cardColor: const Color(0xFF1A1A2E),
+        primaryColor: const Color(0xFF00FFFF), // Bioluminescent Cyan
+        scaffoldBackgroundColor: const Color(0xFF070915), // Endheri Black Coral
+        cardColor: const Color(0xFF131524),
       ),
-      home: const NewsFeedPage(),
+      home: const SentinelSurface(),
+    );
+  }
+}
+
+class SentinelSurface extends StatefulWidget {
+  const SentinelSurface({super.key});
+  @override
+  State<SentinelSurface> createState() => _SentinelSurfaceState();
+}
+
+class _SentinelSurfaceState extends State<SentinelSurface> {
+  int _currentIndex = 0;
+  final List<Widget> _surfaces = const [NewsFeedPage(), KoshaaruVaultPage()];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: _surfaces[_currentIndex],
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          border: Border(top: BorderSide(color: const Color(0xFF00FFFF).withOpacity(0.3), width: 1)),
+        ),
+        child: BottomNavigationBar(
+          backgroundColor: const Color(0xFF070915),
+          selectedItemColor: const Color(0xFF00FFFF),
+          unselectedItemColor: Colors.grey[600],
+          currentIndex: _currentIndex,
+          onTap: (index) => setState(() => _currentIndex = index),
+          items: const [
+            BottomNavigationBarItem(icon: Icon(Icons.waves), label: 'Oivaru (Pulse)'),
+            BottomNavigationBarItem(icon: Icon(Icons.directions_boat), label: 'Koshaaru (Vault)'),
+          ],
+        ),
+      ),
     );
   }
 }
@@ -132,25 +167,25 @@ class _NewsFeedPageState extends State<NewsFeedPage> {
         padding: const EdgeInsets.symmetric(horizontal: 16),
         children: [
           _buildGlassWidget(
-            icon: Icons.calendar_month,
-            title: "14 Ramadan 1447",
-            subtitle: "Lunar Cycle",
-            color: const Color(0xFF00CED1),
+            icon: Icons.account_balance,
+            title: "Political Pulse",
+            subtitle: "Cabinet & Majlis",
+            color: const Color(0xFF00FFFF), // Cyan
             onTap: () {},
           ),
           _buildGlassWidget(
-            icon: Icons.mosque,
-            title: "Next: Maghrib",
-            subtitle: "18:12 (Malé)",
-            color: const Color(0xFF00FFFF),
+            icon: Icons.business,
+            title: "Institutional Vibe",
+            subtitle: "STO & Logistics",
+            color: const Color(0xFFFF1493), // Pink
             onTap: () {},
           ),
           _buildGlassWidget(
-            icon: Icons.notifications_active,
-            title: "Pick/Drop",
-            subtitle: "Time: ${pickDropTime.format(context)}",
-            color: const Color(0xFFFF4500),
-            onTap: _selectPickDropTime,
+            icon: Icons.history_edu,
+            title: "Senior Wisdom",
+            subtitle: "Historical Context",
+            color: const Color(0xFFFF4500), // Orange
+            onTap: () {},
           ),
         ],
       ),

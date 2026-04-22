@@ -2,11 +2,13 @@ package database
 
 import (
 	"log"
+	"os"
 	"time"
 
 	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
 	"github.com/glebarez/sqlite"
+	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
 
@@ -36,7 +38,16 @@ func (u *User) BeforeCreate(tx *gorm.DB) (err error) {
 
 func InitDB() {
 	var err error
-	DB, err = gorm.Open(sqlite.Open("headlines.db"), &gorm.Config{})
+	dbURL := os.Getenv("DATABASE_URL")
+
+	if dbURL != "" {
+		// Production: Connect to PostgreSQL
+		DB, err = gorm.Open(postgres.Open(dbURL), &gorm.Config{})
+	} else {
+		// Sandbox: Connect to Local SQLite
+		DB, err = gorm.Open(sqlite.Open("headlines.db"), &gorm.Config{})
+	}
+
 	if err != nil {
 		log.Fatal("Failed to connect to database:", err)
 	}

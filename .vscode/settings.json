@@ -1,0 +1,37 @@
+{
+  "tdad.project.techStack": "typescript-node",
+  "tdad.project.techStackCustom": "",
+  "tdad.project.projectType": "web-app",
+  "tdad.project.projectTypeCustom": "",
+  "tdad.project.database": "postgresql",
+  "tdad.project.databaseCustom": "",
+  "tdad.project.sourceRoot": "src/",
+  "tdad.project.docsRoot": "docs/",
+  "tdad.agent.cli.enabled": true,
+  "tdad.agent.cli.command": "gemini \"{prompt}\"",
+  "tdad.agent.cli.preset": "gemini",
+  "tdad.agent.cli.permissionFlags": {
+    "claude": {
+      "dangerouslySkipPermissions": false
+    },
+    "aider": {
+      "yesAlways": false,
+      "autoCommit": false
+    },
+    "codex": {
+      "dangerouslyBypassApprovalsAndSandbox": false
+    },
+    "cursor": {
+      "autoApprove": false
+    },
+    "gemini": {
+      "yolo": false
+    },
+    "opencode": {
+      "autoApprove": false
+    }
+  },
+  "workbench.editor.limit.perEditorGroup": true,
+  "workbench.editor.preferHistoryBasedLanguageDetection": true,
+  "editor.codeActions.triggerOnFocusChange": true
+}

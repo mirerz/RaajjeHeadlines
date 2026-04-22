@@ -1,0 +1,33 @@
+# The Data Connect Operation for the React frontend
+query GetHotspotsForEndheriOdi @auth(level: PUBLIC) {
+  loreHotspots(orderBy: [{ lastAwakening: DESC }]) {
+    id
+    name
+    loreData
+    isGeminiVerified
+    lastAwakening
+  }
+}
+
+query ListCabinet @auth(level: PUBLIC) {
+  cabinetMembers(orderBy: [{ id: ASC }]) {
+    id
+    thaName
+    engName
+    portfolio
+    vibeDensity
+  }
+}
+
+query GetNewsFeed($category: String!) @auth(level: PUBLIC) {
+  newsArticles(
+    where: { category: { eq: $category } },
+    orderBy: [{ timestamp: DESC }]
+  ) {
+    id
+    headlineTha
+    headlineEng
+    conflictLevel
+    timestamp
+  }
+}

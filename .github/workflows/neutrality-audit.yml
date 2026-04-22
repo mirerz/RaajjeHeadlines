@@ -1,0 +1,24 @@
+name: 729-NEUTRAL-01 Audit
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  neutrality-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Scan for Sterile Breaches
+        run: |
+          echo "Scanning all files for unauthorized string references..."
+          if grep -rnwi . -e "YourKey" -e "Dhovemi" -e "Endheri" --exclude-dir=.git --exclude-dir=.github; then
+            echo "::error::Neutrality Breach! Private data (YourKey or Dhovemi/Endheri terms) detected in public repository."
+            exit 1
+          else
+            echo "All checks passed. Repository is sterile per Mandate 729-NEUTRAL-01."
+          fi

@@ -1,19 +1,28 @@
 package main
 
 import (
+	"context"
 	"log"
 	"os"
 
 	"github.com/729holdings/raajje-headlines/internal/api"
 	"github.com/729holdings/raajje-headlines/internal/database"
+	"github.com/729holdings/raajje-headlines/internal/rewriter"
+	"github.com/729holdings/raajje-headlines/internal/scraper"
 	"github.com/gofiber/fiber/v2"
-	"github.com/gofiber/fiber/v2/middleware/basicauth"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 )
 
 func main() {
 	// Initialize Database Connection
 	database.InitDB()
+	database.InitRedis()
+
+	// Start Agentic Rewriter in the background
+	go rewriter.RunAgent(context.Background())
+
+	// Start X-Intelligence Node (Monitoring handles)
+	go scraper.ListenToXIntelligence()
 
 	app := fiber.New(fiber.Config{
 		AppName: "Raajjé HEADLINES v1.0",
@@ -22,12 +31,14 @@ func main() {
 	// Enable CORS for dashboard local development
 	app.Use(cors.New())
 
+	// Initialize Firebase Auth
+	if err := api.InitFirebase(); err != nil {
+		log.Printf("Warning: Failed to initialize Firebase Auth: %v\n", err)
+	}
+
 	// Admin Routes (Requires Auth) for Editorial Approval
-	admin := app.Group("/admin", basicauth.New(basicauth.Config{
-		Users: map[string]string{
-			os.Getenv("ADMIN_USER"): os.Getenv("ADMIN_PASS"),
-		},
-	}))
+	// Replaced basicauth with Firebase Auth Middleware
+	admin := app.Group("/admin", api.FirebaseAuthMiddleware())
 	
 	admin.Get("/pending", api.GetPendingArticles) // Fetch articles for the Dashboard
 	admin.Post("/approve/:id", api.ApproveArticle)
@@ -45,6 +56,7 @@ func main() {
 
 	// Public Routes for the Mobile App/Website
 	apiV1.Get("/feed", api.GetFeed)
+	apiV1.Get("/feed/lore", api.GetLore)
 	apiV1.Get("/article/:id", api.GetArticleDetail)
 	apiV1.Get("/search", api.SearchArticles)
 
@@ -53,6 +65,7 @@ func main() {
 	aiV1.Post("/gemini/analyze", api.AnalyzeGemini)
 	aiV1.Post("/nano-banana/generate", api.GenerateImagine)
 	aiV1.Post("/veo/video", api.CueVeo)
+	aiV1.Post("/raahi/calculate", api.CalculateAbjad)
 
 	port := os.Getenv("PORT")
 	if port == "" {

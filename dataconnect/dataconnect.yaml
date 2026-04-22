@@ -1,0 +1,15 @@
+# Firebase Data Connect Configuration
+specVersion: "v1alpha"
+serviceId: "dhovemi-saga"
+location: "us-central1"
+
+schema:
+  source: "./schema"
+  datasource:
+    postgresql:
+      database: "dhovemisaga_db"
+      cloudSql:
+        instanceId: "adhu-492602-fdc"
+
+connectorDirs:
+  - "./connector"

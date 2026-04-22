@@ -1,0 +1,21 @@
+// Bioluminescent Cyan Pulse Shader (AGSL)
+// Anchored in 729-NEUTRAL-01 Mandate
+
+uniform float uTime;
+uniform float2 uResolution;
+
+half4 main(float2 fragCoord) {
+    float2 uv = fragCoord / uResolution.xy;
+    float2 center = float2(0.5, 0.5);
+    float dist = distance(uv, center);
+    
+    // Pulse logic
+    float pulse = sin(uTime * 2.0) * 0.5 + 0.5;
+    float ring = smoothstep(0.4 * pulse, 0.41 * pulse, dist) - smoothstep(0.42 * pulse, 0.43 * pulse, dist);
+    
+    // 729 Bioluminescent Cyan: #00FFFF
+    half3 cyan = half3(0.0, 1.0, 1.0);
+    half alpha = ring * 0.8;
+    
+    return half4(cyan * alpha, alpha);
+}

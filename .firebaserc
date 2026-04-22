@@ -1,0 +1,22 @@
+{
+  "projects": {
+    "default": "raajje-ai-news",
+    "adhu-space": "adhu-space-729"
+  },
+  "targets": {
+    "raajje-ai-news": {
+      "hosting": {
+        "dashboard": [
+          "raajje-headline"
+        ]
+      }
+    },
+    "adhu-space-729": {
+      "hosting": {
+        "portal": [
+          "adhu-space-729"
+        ]
+      }
+    }
+  }
+}

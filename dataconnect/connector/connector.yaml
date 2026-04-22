@@ -1,0 +1,8 @@
+connectorId: dhovemi-saga-connector
+generate:
+  javascriptSdk:
+    outputDir: "../../adhu-portal/app/dataconnect"
+    package: "@firebasegen/dhovemi-saga-connector"
+  kotlinSdk:
+    outputDir: "../../android_executive/app/src/main/java/com/seventwonine/executive/dataconnect"
+    package: "com.seventwonine.executive.dataconnect"

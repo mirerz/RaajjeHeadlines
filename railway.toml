@@ -1,0 +1,19 @@
+# Railway Production Configuration
+# 729 Holdings | Raajjé HEADLINES
+
+[build]
+builder = "docker"
+dockerfile = "Dockerfile"
+
+[deploy]
+startCommand = "./api_bin"
+healthcheckPath = "/api/feed"
+healthcheckTimeout = 100
+restartPolicyType = "on-failure"
+
+[[services]]
+# Background Aggregator Service
+# This runs the news scraper every 30 minutes
+name = "aggregator"
+startCommand = "./aggregator_bin"
+cron = "*/30 * * * *"

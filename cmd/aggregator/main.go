@@ -3,7 +3,6 @@ package main
 import (
 	"log"
 	"sync"
-	"time"
 
 	"github.com/729holdings/raajje-headlines/internal/database"
 	"github.com/729holdings/raajje-headlines/internal/scraper"
@@ -11,25 +10,20 @@ import (
 
 func main() {
 	database.InitDB()
-	log.Println("🚀 729 Agentic Newsroom: Aggregator Loop Started (15m Cycles)")
+	log.Println("🚀 729 Agentic Newsroom: Aggregator Cycle Started")
 
-	// Run initial cycle
+	// Run single cycle for Cloud Run Jobs
 	runScraperCycle()
-
-	// Ticker for periodic updates
-	ticker := time.NewTicker(15 * time.Minute)
-	defer ticker.Stop()
-
-	for {
-		select {
-		case <-ticker.C:
-			runScraperCycle()
-		}
-	}
+    
+    log.Println("🏁 Aggregator Cycle Complete. Exiting gracefully.")
 }
 
 func runScraperCycle() {
-	log.Println("🔄 Starting Concurrent Scrape Cycle...")
+	log.Println("🔄 Starting Concurrent Scrape & RSS Ingest Cycle...")
+	
+	// 1. Run RSS Ingestion
+	scraper.IngestRSSSources()
+
 	var wg sync.WaitGroup
 	
 	// List of supported sources
@@ -44,7 +38,33 @@ func runScraperCycle() {
 		wg.Add(1)
 		go func(f func() ([]scraper.NewsArticle, error)) {
 			defer wg.Done()
-			_, _ = f()
+			articles, err := f()
+			if err != nil {
+				log.Printf("Scrape error: %v", err)
+				return
+			}
+
+			for _, a := range articles {
+				// Check if already exists by URL
+				var count int64
+				database.DB.Model(&database.Article{}).Where("original_url = ?", a.Link).Count(&count)
+				if count == 0 {
+					article := database.Article{
+						RawHeadline: a.Title,
+						RawBody:     a.Body,
+						OriginalURL: a.Link,
+						SourceID:    1, // Placeholder for source mapping
+						Status:      "pending_review",
+					}
+					if err := database.DB.Create(&article).Error; err != nil {
+						log.Printf("❌ Failed to save article: %v", err)
+					} else {
+						log.Printf("📥 Saved new article: %s", a.Title)
+					}
+				} else {
+					log.Printf("⏭️  Skipping existing article: %s", a.Title)
+				}
+			}
 		}(scrapeFunc)
 	}
 

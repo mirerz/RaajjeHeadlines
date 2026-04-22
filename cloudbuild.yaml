@@ -1,0 +1,45 @@
+steps:
+  # Build the multi-service Docker image
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'us-central1-docker.pkg.dev/$PROJECT_ID/raajje-repo/adhu-portal:$BUILD_ID', '.']
+
+  # Push the container image to Artifact Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'us-central1-docker.pkg.dev/$PROJECT_ID/raajje-repo/adhu-portal:$BUILD_ID']
+
+  # Deploy API / Platform to Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      - 'run'
+      - 'deploy'
+      - 'adhu-portal'
+      - '--image'
+      - 'us-central1-docker.pkg.dev/$PROJECT_ID/raajje-repo/adhu-portal:$BUILD_ID'
+      - '--region'
+      - 'us-central1'
+      - '--platform'
+      - 'managed'
+      - '--allow-unauthenticated'
+      - '--port'
+      - '8080'
+      - '--set-env-vars'
+      - 'ENVIRONMENT=production'
+
+  # Deploy Aggregator (Worker) to Cloud Run or Cloud Run Jobs
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      - 'run'
+      - 'jobs'
+      - 'deploy'
+      - 'adhu-aggregator'
+      - '--image'
+      - 'us-central1-docker.pkg.dev/$PROJECT_ID/raajje-repo/adhu-portal:$BUILD_ID'
+      - '--region'
+      - 'us-central1'
+      - '--command'
+      - './aggregator_bin'
+
+images:
+  - 'us-central1-docker.pkg.dev/$PROJECT_ID/raajje-repo/adhu-portal:$BUILD_ID'
