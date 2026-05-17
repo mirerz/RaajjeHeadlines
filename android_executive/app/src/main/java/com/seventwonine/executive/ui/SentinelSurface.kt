@@ -1,39 +1,58 @@
 package com.seventwonine.executive.ui
 
-import android.graphics.RuntimeShader
-import android.os.Build
-import androidx.annotation.RequiresApi
-import androidx.compose.foundation.Canvas
+import android.net.Uri
+import android.view.Choreographer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ShaderBrush
-import androidx.compose.ui.platform.LocalContext
-import com.seventwonine.executive.R
-import kotlinx.coroutines.isActive
+import androidx.compose.ui.viewinterop.AndroidView
+import com.google.ar.sceneform.SceneView
+import com.google.ar.sceneform.math.Quaternion
+import com.google.ar.sceneform.math.Vector3
+import com.google.ar.sceneform.rendering.ModelRenderable
+import com.google.ar.sceneform.Node
 
-@RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @Composable
 fun SentinelSurface(modifier: Modifier = Modifier) {
-    val context = LocalContext.current
-    val shaderCode = remember {
-        context.resources.openRawResource(R.raw.bioluminescent_pulse).bufferedReader().use { it.readText() }
-    }
+    var modelRenderable by remember { mutableStateOf<ModelRenderable?>(null) }
     
-    val runtimeShader = remember { RuntimeShader(shaderCode) }
-    var time by remember { mutableStateOf(0f) }
-
-    LaunchedEffect(Unit) {
-        val startTime = System.currentTimeMillis()
-        while (isActive) {
-            time = (System.currentTimeMillis() - startTime) / 1000f
-            runtimeShader.setFloatUniform("uTime", time)
-            kotlinx.coroutines.delay(16) // ~60fps
+    AndroidView(
+        modifier = modifier.fillMaxSize(),
+        factory = { context ->
+            val sceneView = SceneView(context)
+            // Optional: Transparent background so it blends well
+            sceneView.backgroundColor = com.google.ar.sceneform.rendering.Color(0.027f, 0.035f, 0.082f) // Endheri Black Coral #070915
+            
+            // Load a placeholder 3D Model (.glb)
+            // Replace with Uri.parse("android.resource://${context.packageName}/raw/your_model") for local assets
+            ModelRenderable.builder()
+                .setSource(context, Uri.parse("https://storage.googleapis.com/ar-answers-in-search-models/static/Tiger/model.glb"))
+                .setIsFilamentGltf(true)
+                .build()
+                .thenAccept { renderable ->
+                    modelRenderable = renderable
+                    
+                    val node = Node().apply {
+                        setParent(sceneView.scene)
+                        this.renderable = renderable
+                        localPosition = Vector3(0f, -0.5f, -2.5f) // Positioned nicely behind the UI
+                    }
+                    
+                    // Dynamic ambient rotation for the 3D Background
+                    var angle = 0f
+                    sceneView.scene.addOnUpdateListener {
+                        angle += 0.5f
+                        node.localRotation = Quaternion.axisAngle(Vector3(0f, 1f, 0f), angle)
+                    }
+                }
+                .exceptionally { 
+                    null 
+                }
+                
+            sceneView
+        },
+        onRelease = { sceneView ->
+            sceneView.destroy()
         }
-    }
-
-    Canvas(modifier = modifier.fillMaxSize()) {
-        runtimeShader.setFloatUniform("uResolution", size.width, size.height)
-        drawRect(ShaderBrush(runtimeShader))
-    }
+    )
 }

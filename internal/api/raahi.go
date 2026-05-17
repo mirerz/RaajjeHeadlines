@@ -35,10 +35,17 @@ func CalculateAbjad(c *fiber.Ctx) error {
 		finalForce = (finalForce % 10) + (finalForce / 10)
 	}
 
+	// Gemini Synthesis for Destiny Briefing
+	synthesis, err := ai.SynthesizeDestiny(c.Context(), req.Name, totalValue, finalForce)
+	if err != nil {
+		synthesis = "The patterns are currently shifting. Your path remains uniquely yours."
+	}
+
 	return c.JSON(fiber.Map{
 		"total_value": totalValue,
 		"final_force": finalForce,
+		"synthesis":   synthesis,
 		"status":      "success",
-		"tier":        "free", // Logic for subscriber detection can be added later
+		"tier":        "free", 
 	})
 }

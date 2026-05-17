@@ -1,0 +1,29 @@
+
+================================================================================
+TDAD Session Started: 2026-05-16T12:51:08.485Z
+================================================================================
+[2026-05-16T12:52:30.414Z] [EXTENSION] 🚀 TDAD extension is now ACTIVATED! Version with comprehensive logging
+[2026-05-16T12:52:30.520Z] [EXTENSION] 📁 Log file location: c:\Users\Surface\OneDrive\raajje-headlines\.tdad\logs\tdad-2026-05-16.log
+[2026-05-16T12:52:30.525Z] [EXTENSION] 📊 Workspace folders: c:\Users\Surface\OneDrive\raajje-headlines
+[2026-05-16T12:52:30.528Z] [EXTENSION] Creating WorkflowController...
+[2026-05-16T12:52:30.531Z] [EXTENSION] MVP: Using simple JSON storage (.tdad/workflows/workflow.json)
+[2026-05-16T12:52:30.533Z] [EXTENSION] TDAD Extension activated successfully
+[2026-05-16T12:52:30.535Z] [EXTENSION] Registering commands...
+[2026-05-16T12:53:03.286Z] [EXTENSION] FeedbackManager: Session 46
+[2026-05-16T12:53:34.086Z] [EXTENSION] TDAD structure already initialized
+[2026-05-16T12:53:34.088Z] [EXTENSION] Auto-opening TDAD Canvas...
+[2026-05-16T12:53:34.102Z] [CANVAS] Sprint 13: Agent Orchestrator initialized
+[2026-05-16T12:53:34.105Z] [CANVAS] [FileStatusSync] File watchers initialized
+[2026-05-16T12:53:34.114Z] [CANVAS] [FileStatusSync] Synced 0 nodes
+[2026-05-16T13:00:24.716Z] [CANVAS] WEBVIEW
+Data: Using stylesheets: index-WTAp2nbL.css
+[2026-05-16T13:00:24.731Z] [CANVAS] MVP: Canvas initialized with simple JSON storage
+[2026-05-16T13:05:12.058Z] [CANVAS] [FitView] isLoading=true, nodes.length=0, folderId=null
+[2026-05-16T13:05:12.072Z] [CANVAS] [FileStatusSync] Synced 0 nodes
+[2026-05-16T13:05:24.123Z] [CANVAS] [FitView] isLoading=false, nodes.length=0, folderId=null
+[2026-05-16T13:15:46.571Z] [CANVAS] saveNow: Saving 0 nodes to folder root - statuses: []
+[2026-05-16T13:15:46.937Z] [CANVAS] [FileStatusSync] File watchers disposed
+[2026-05-16T13:20:15.412Z] [EXTENSION] Blueprint workflow changed: c:\Users\Surface\OneDrive\raajje-headlines\.tdad\workflows\root.workflow.json
+[2026-05-16T13:20:15.582Z] [EXTENSION] Scaffolded 1 new files from blueprint update
+[2026-05-16T13:40:39.272Z] [EXTENSION] Blueprint workflow changed: c:\Users\Surface\OneDrive\raajje-headlines\.tdad\workflows\root.workflow.json
+[2026-05-16T13:40:39.417Z] [EXTENSION] Scaffolded 1 new files from blueprint update

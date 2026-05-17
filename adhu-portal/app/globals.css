@@ -3,56 +3,117 @@
 @tailwind utilities;
 
 :root {
-  --maritime-indigo: #0b0e23;
-  --sentinel-surface: #1a1a2e;
-  --bioluminescent-cyan: #00ffff;
-  --glass-white: rgba(255, 255, 255, 0.05);
-  --glass-border: rgba(255, 255, 255, 0.1);
-  --font-interface: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --font-thaana: 'MV Boli', 'Awaadhu', 'Inter', sans-serif;
+  --broadsheet-cream: #f4f1ea;
+  --midnight-heritage: #000B1E;
+  --prestige-gold: #F4B400;
+  --ink-black: #1a1a1a;
+  --paper-grain: url('https://www.transparenttextures.com/patterns/paper-fibers.png');
+  --font-serif: 'Playfair Display', serif;
+  --font-interface: 'Inter', sans-serif;
 }
 
 body {
-  background: radial-gradient(circle at center, var(--sentinel-surface) 0%, var(--maritime-indigo) 100%);
-  background-attachment: fixed;
-  color: white;
-  min-height: 100vh;
-  margin: 0;
+  background-color: var(--broadsheet-cream);
+  background-image: var(--paper-grain);
+  color: var(--ink-black);
   font-family: var(--font-interface);
-  overflow-x: hidden;
+  transition: background-color 0.5s ease;
 }
 
-.sterile-grid {
-  max-width: 42rem;
+/* 📰 The Broadsheet Layout */
+.broadsheet-container {
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 2rem 1rem;
-  display: flex;
-  flex-direction: column;
+  padding: 2rem;
+  display: grid;
+  grid-template-columns: 80px 1fr 300px; /* Sidebar | Main | Grid */
   gap: 2rem;
 }
 
-.glass-card {
-  background: var(--glass-white);
-  border: 1px solid var(--glass-border);
-  border-radius: 16px;
-  padding: 1.5rem;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  will-change: transform;
+/* ✨ High-Rank Pulse Animation */
+.news-item-high-rank {
+  position: relative;
+  border: 1px solid rgba(244, 180, 0, 0.2);
+  background: white;
+  box-shadow: 0 0 15px rgba(244, 180, 0, 0.1);
+  animation: pulse-glow 3s infinite ease-in-out;
 }
 
-.glass-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 32px rgba(0, 255, 255, 0.1);
+@keyframes pulse-glow {
+  0% { box-shadow: 0 0 10px rgba(244, 180, 0, 0.1); }
+  50% { box-shadow: 0 0 25px rgba(244, 180, 0, 0.4); border-color: var(--prestige-gold); }
+  100% { box-shadow: 0 0 10px rgba(244, 180, 0, 0.1); }
 }
 
-.glass-card h2 {
-  color: var(--bioluminescent-cyan);
-  font-size: 1.25rem;
-  font-weight: 600;
-  margin-bottom: 1rem;
-  letter-spacing: -0.02em;
+/* 🛸 The 5-Tile Transformer Grid (Web Implementation) */
+.transformer-grid {
+  display: grid;
+  grid-template-rows: repeat(5, 1fr);
+  gap: 12px;
+  position: sticky;
+  top: 2rem;
+}
+
+.tile-1x1 {
+  aspect-ratio: 1/1;
+  background: var(--midnight-heritage);
+  color: var(--prestige-gold);
+  border: 1px solid var(--prestige-gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: bold;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.tile-1x1:hover {
+  transform: scale(1.05);
+  background: var(--prestige-gold);
+  color: var(--midnight-heritage);
+}
+
+/* 🖋️ Traditional Typography */
+.hero-headline {
+  font-family: var(--font-serif);
+  font-size: 4rem;
+  line-height: 1.1;
+  font-weight: 900;
+  border-bottom: 4px solid var(--ink-black);
+  padding-bottom: 1rem;
+  margin-bottom: 2rem;
+}
+
+/* 🧊 Sticky Pan/Crawl Scroll Physics */
+.broadsheet-container {
+  scroll-snap-type: y proximity;
+  overflow-y: auto;
+  height: 100vh;
+}
+
+article {
+  scroll-snap-align: start;
+  scroll-margin-top: 2rem;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.6s ease;
+  transform: translateY(20px) scale(0.98);
+  opacity: 0.8;
+}
+
+article.in-view {
+  transform: translateY(0) scale(1);
+  opacity: 1;
+}
+
+/* 🛸 Content 'Pull' Effect */
+@keyframes crawl-in {
+  from { clip-path: inset(100% 0 0 0); transform: translateY(100px); }
+  to { clip-path: inset(0 0 0 0); transform: translateY(0); }
+}
+
+.sticky-crawl {
+  animation: crawl-in 0.8s cubic-bezier(0.23, 1, 0.32, 1) both;
 }
 
 .pulse-hex {

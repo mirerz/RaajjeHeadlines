@@ -1,0 +1,11 @@
+
+================================================================================
+TDAD Session Started: 2026-04-23T00:12:04.192Z
+================================================================================
+[2026-04-23T00:33:50.509Z] [EXTENSION] 🚀 TDAD extension is now ACTIVATED! Version with comprehensive logging
+[2026-04-23T00:33:50.589Z] [EXTENSION] 📁 Log file location: c:\Users\Surface\OneDrive\raajje-headlines\.tdad\logs\tdad-2026-04-23.log
+[2026-04-23T00:33:50.616Z] [EXTENSION] 📊 Workspace folders: c:\Users\Surface\OneDrive\raajje-headlines
+[2026-04-23T00:33:50.662Z] [EXTENSION] Creating WorkflowController...
+[2026-04-23T00:33:50.700Z] [EXTENSION] MVP: Using simple JSON storage (.tdad/workflows/workflow.json)
+[2026-04-23T00:33:50.740Z] [EXTENSION] TDAD Extension activated successfully
+[2026-04-23T00:33:50.742Z] [EXTENSION] Registering commands...

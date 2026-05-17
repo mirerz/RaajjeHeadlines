@@ -1,7 +1,10 @@
 package api
 
 import (
+	"bytes"
 	"encoding/json"
+	"net/http"
+	"os"
 	"time"
 
 	"github.com/729holdings/raajje-headlines/internal/database"
@@ -195,4 +198,44 @@ func GetLore(c *fiber.Ctx) error {
 		return c.Status(500).JSON(fiber.Map{"error": "Could not fetch lore"})
 	}
 	return c.JSON(hotspots)
+}
+
+// SynthesizeVoice handles text-to-speech using ElevenLabs
+func SynthesizeVoice(c *fiber.Ctx) error {
+	apiKey := os.Getenv("XI_API_KEY")
+	voiceID := "YOUR_VOICE_ID" // Replace with your cloned Voice ID
+	url := "https://api.elevenlabs.io/v1/text-to-speech/" + voiceID
+
+	// Parse incoming text from Flutter
+	var requestData struct {
+		Text string `json:"text"`
+	}
+	if err := c.BodyParser(&requestData); err != nil {
+		return c.Status(fiber.StatusBadRequest).SendString("Invalid request body")
+	}
+
+	// Construct the ElevenLabs payload
+	payload := map[string]interface{}{
+		"text":     requestData.Text,
+		"model_id": "eleven_multilingual_v2", 
+		"voice_settings": map[string]interface{}{
+			"stability":        0.75,
+			"similarity_boost": 0.90,
+		},
+	}
+	jsonPayload, _ := json.Marshal(payload)
+
+	req, _ := http.NewRequest("POST", url, bytes.NewBuffer(jsonPayload))
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("xi-api-key", apiKey)
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil || resp.StatusCode != http.StatusOK {
+		return c.Status(fiber.StatusInternalServerError).SendString("Failed to reach voice synthesis service")
+	}
+
+	// Stream the audio bytes directly back to the client
+	c.Set("Content-Type", "audio/mpeg")
+	return c.SendStream(resp.Body)
 }

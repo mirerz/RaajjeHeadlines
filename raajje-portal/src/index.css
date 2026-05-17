@@ -294,7 +294,36 @@ body {
   border-radius: 4px;
 }
 
-/* Subscriber Threshold */
+/* Sticky Pan/Crawl Scroll Physics */
+html, body, #root {
+  scroll-behavior: smooth;
+}
+
+.feed-grid {
+  scroll-snap-type: y proximity;
+}
+
+.feed-grid > div {
+  scroll-snap-align: start;
+  scroll-margin-top: 2rem;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.6s ease;
+  transform: translateY(20px) scale(0.98);
+  opacity: 0.8;
+}
+
+.feed-grid > div:hover, .feed-grid > div.in-view {
+  transform: translateY(0) scale(1);
+  opacity: 1;
+}
+
+@keyframes crawl-in {
+  from { clip-path: inset(100% 0 0 0); transform: translateY(100px); }
+  to { clip-path: inset(0 0 0 0); transform: translateY(0); }
+}
+
+.sticky-crawl {
+  animation: crawl-in 0.8s cubic-bezier(0.23, 1, 0.32, 1) both;
+}
 .subscriber-threshold-section {
   padding: 0 3rem 2rem;
 }

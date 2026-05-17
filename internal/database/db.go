@@ -55,10 +55,11 @@ func InitDB() {
 	// Wait, we need to enforce foreign keys for SQLite if needed, but simple auto-migration is enough.
 
 	// Auto-Migrate the models
-	DB.AutoMigrate(&Article{}, &Source{}, &User{}, &Quote{})
+	DB.AutoMigrate(&Article{}, &Source{}, &User{}, &Quote{}, &LoreHotspot{})
 	
 	// Seed Initial Sources if they don't exist
 	seedSources()
+	seedLore()
 	
 	log.Println("Database connection established and seed data checked.")
 	// Bootstrapping: Create Default Admin if no users exist
@@ -86,5 +87,30 @@ func seedSources() {
 		}
 		DB.Create(&initialSources)
 		log.Println("Seeded initial news sources (Mihaaru, Sun).")
+	}
+}
+
+func seedLore() {
+	var count int64
+	DB.Model(&LoreHotspot{}).Count(&count)
+	if count == 0 {
+		initialLore := []LoreHotspot{
+			{
+				Name:           "THE FIRST AWAKENING",
+				LoreData:       "Ancient texts found in the deep kosh of Hinnavaru reveal the first activation of the Sentinel Protocol during the Dhovemi Saga.",
+				Category:       "ORAL_HISTORY",
+				IsGeminiVerified: true,
+				LastAwakening:  time.Now(),
+			},
+			{
+				Name:           "MARITIME INDIGO ORIGIN",
+				LoreData:       "The triadic palette of the Republic was not a design choice, but a biological necessity dictated by the bioluminescent cyan of the inner reef.",
+				Category:       "HULL_DNA",
+				IsGeminiVerified: false,
+				LastAwakening:  time.Now(),
+			},
+		}
+		DB.Create(&initialLore)
+		log.Println("Seeded initial lore hotspots.")
 	}
 }

@@ -9,6 +9,7 @@ import { auth, db } from './firebase';
 import './index.css';
 import { getHotspotsForEndheriOdi } from './dataconnect';
 import ThinkingAnimation from './ThinkingAnimation';
+import BrutalistAuthModal from './BrutalistAuthModal';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -44,6 +45,7 @@ function PortalHome({ user, role }) {
   const [hotspots, setHotspots] = useState([]);
   const [feed, setFeed] = useState([]);
   const [activeCategory, setActiveCategory] = useState("Fahuge");
+  const [isAuthOpen, setIsAuthOpen] = useState(false);
 
   const categories = [
     { id: "Fahuge", label: "Fahuge / (Landing Page)", icon: "🏠" },
@@ -58,24 +60,25 @@ function PortalHome({ user, role }) {
   ];
 
   useEffect(() => {
+    const baseUrl = import.meta.env.VITE_API_URL || "http://localhost:3000";
+    
     async function loadHotspots() {
       try {
-        const response = await getHotspotsForEndheriOdi();
-        if (response.data?.loreHotspots) {
-          setHotspots(response.data.loreHotspots);
+        const response = await fetch(`${baseUrl}/api/lore`);
+        if (response.ok) {
+          const json = await response.json();
+          setHotspots(json.data || []);
         }
       } catch (e) {
-        console.error("Oivaru Engine sync error:", e);
+        console.error("Oivaru Engine lore sync error:", e);
       }
     }
     async function loadFeed() {
-      // Logic: Use the Vite environment variable for production, or fallback to local sandbox
-      const baseUrl = import.meta.env.VITE_API_URL || "http://127.0.0.1:3005";
       try {
         const res = await fetch(`${baseUrl}/api/feed`);
         if (res.ok) {
-          const data = await res.json();
-          setFeed(data);
+          const json = await res.json();
+          setFeed(json.data || []); // Ensure we use .data from Go response
         }
       } catch (e) {
         console.error("Feed sync error:", e);
@@ -90,17 +93,23 @@ function PortalHome({ user, role }) {
 
   return (
     <>
-      <header className="ambient-header">
-        <div className="logo">
-          adhu.space<span className="dot">.</span>
+      <BrutalistAuthModal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} />
+      <header className="ambient-header" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '1rem 0', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+        <div className="logo-masthead" style={{ width: '100%', display: 'flex', justifyContent: 'center', borderBottom: '2px solid var(--neutral-white)', padding: '2rem 0' }}>
+          <img src="/logo-deepblue.png" alt="Raajjé HEADLINES" style={{ height: '120px', objectFit: 'contain' }} />
         </div>
-        <div className="vibe-indicator">
+        <div className="edition-bar" style={{ width: '100%', display: 'flex', justifyContent: 'space-between', padding: '0.5rem 3rem', fontSize: '0.7rem', fontWeight: '900', textTransform: 'uppercase', letterSpacing: '2px', opacity: 0.7 }}>
+           <span>First Edition</span>
+           <span>Sovereign Intelligence Grid</span>
+           <span>2026.04.22</span>
+        </div>
+        <div className="vibe-indicator" style={{ position: 'absolute', top: '2rem', right: '3rem' }}>
           {user ? (
             <Link to="/editorial" className="editorial-link">
               {role === 'SUBSCRIBER' ? 'THE VAULT 🏺' : 'EDITORIAL HUB 🏮'}
             </Link>
           ) : (
-            <Link to="/editorial" className="login-btn">JOIN THE REPUBLIC</Link>
+            <button onClick={() => setIsAuthOpen(true)} className="login-btn">JOIN THE REPUBLIC</button>
           )}
         </div>
       </header>
@@ -154,9 +163,9 @@ function PortalHome({ user, role }) {
         <SubscriberThreshold />
       </section>
 
-      <section className="feed-grid p-6" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '24px' }}>
+      <section className="feed-grid sticky-crawl p-6" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '24px' }}>
         {regularFeed.map(article => (
-          <div key={article.ID} className="bg-[#1A1A2E] border border-[#4B0082] rounded-xl overflow-hidden shadow-lg hover:shadow-cyan-500/20 transition transform hover:-translate-y-1">
+          <div key={article.ID} className="bg-[#1A1A2E] in-view border border-[#4B0082] rounded-xl overflow-hidden shadow-lg hover:shadow-cyan-500/20 transition transform hover:-translate-y-1">
             {article.VisualURL && (
               <img src={article.VisualURL} alt="" className="w-full h-48 object-cover border-b border-[#4B0082]" />
             )}
@@ -211,35 +220,37 @@ function PortalHome({ user, role }) {
 }
 
 function SubscriberThreshold() {
-  const [stats, setStats] = useState({ current: 4282, goal: 10000 });
+  const [stats, setStats] = useState({ current_citizens: 4282, goal_citizens: 10000 });
   
   useEffect(() => {
     async function fetchStats() {
+      const baseUrl = import.meta.env.VITE_API_URL || "http://localhost:3000";
       try {
-        const statsDoc = await getDoc(doc(db, "system", "stats"));
-        if (statsDoc.exists()) {
-          setStats(statsDoc.data());
+        const res = await fetch(`${baseUrl}/api/sovereignty`);
+        if (res.ok) {
+          const json = await res.json();
+          setStats(json.data);
         }
       } catch (e) {
-        console.error("Scale sync error:", e);
+        console.error("Sovereignty scale sync error:", e);
       }
     }
     fetchStats();
   }, []);
 
-  const percentage = Math.min((stats.current / stats.goal) * 100, 100);
+  const percentage = Math.min((stats.current_citizens / stats.goal_citizens) * 100, 100);
   return (
     <div className="threshold-container">
       <div className="threshold-label">
         <span>SOVEREIGNTY THRESHOLD</span>
-        <span>{stats.current.toLocaleString()} / {stats.goal.toLocaleString()} CITIZENS</span>
+        <span>{stats.current_citizens.toLocaleString()} / {stats.goal_citizens.toLocaleString()} CITIZENS</span>
       </div>
       <div className="threshold-bar">
         <div className="threshold-fill" style={{ width: `${percentage}%` }}></div>
         <div className="threshold-glow" style={{ left: `${percentage}%` }}></div>
       </div>
       <div className="threshold-meta">
-        {percentage < 100 ? `REMAINING: ${(stats.goal - stats.current).toLocaleString()} NODES FOR FULL AUTONOMY` : 'SOVEREIGNTY ACHIEVED'}
+        {percentage < 100 ? `REMAINING: ${(stats.goal_citizens - stats.current_citizens).toLocaleString()} NODES FOR FULL AUTONOMY` : 'SOVEREIGNTY ACHIEVED'}
       </div>
     </div>
   );

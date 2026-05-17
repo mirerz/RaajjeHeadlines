@@ -38,9 +38,12 @@ android {
 }
 
 dependencies {
+    implementation project(":common-ui")
     implementation 'androidx.core:core-ktx:1.13.1'
     implementation 'androidx.compose.ui:ui:1.6.7'
     implementation 'androidx.compose.material3:material3:1.2.1'
+    // Sceneform for 3D Background Renders
+    implementation 'com.gorisse.thomas.sceneform:sceneform:1.23.0'
     // Firebase Data Connect integration
     implementation 'com.google.firebase:firebase-dataconnect:16.0.0-beta01'
     // Phase 2 Modules

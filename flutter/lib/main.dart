@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'koshaaru_vault.dart';
+import 'voice_service.dart';
 
 void main() {
   runApp(const RaajjeHeadlinesApp());
@@ -81,6 +82,7 @@ class _NewsFeedPageState extends State<NewsFeedPage> {
   List<Article> articles = [];
   bool isLoading = true;
   TimeOfDay pickDropTime = const TimeOfDay(hour: 13, minute: 30);
+  final VoiceService _voiceService = VoiceService();
 
   @override
   void initState() {
@@ -247,6 +249,19 @@ class _NewsFeedPageState extends State<NewsFeedPage> {
                   article.rephrasedHeadlineDv,
                   style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w900, color: Colors.white, height: 1.3),
                   textAlign: TextAlign.right,
+                ),
+                const SizedBox(height: 8),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.volume_up, color: Color(0xFF00FFFF)),
+                      onPressed: () {
+                        _voiceService.synthesizeAndPlay(article.rephrasedHeadlineDv);
+                      },
+                      tooltip: 'Play Executive Summary',
+                    ),
+                  ],
                 ),
                 if (article.isPremium && article.subscriberBriefing.isNotEmpty) ...[
                   const SizedBox(height: 16),

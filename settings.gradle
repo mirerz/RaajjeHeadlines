@@ -10,3 +10,7 @@ project(":oivaru-news").projectDir = file("oivaru-news")
 
 include ":koshaaru-lore"
 project(":koshaaru-lore").projectDir = file("koshaaru-lore")
+
+include ":common-ui"
+project(":common-ui").projectDir = file("common-ui")
+
